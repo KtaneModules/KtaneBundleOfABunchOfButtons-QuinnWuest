@@ -406,7 +406,7 @@ public class SapphireButtonScript : MonoBehaviour
 
 
 #pragma warning disable 0414
-    private readonly string TwitchHelpMessage = "!{0} tap 1 [stage 1: tap when the timer (modulo 4) is 1] | !{0} tap 1 3 2 3 1 [stage 2: tap when the highlight is in these positions] | !{0} reset";
+    private readonly string TwitchHelpMessage = "!{0} tap 3 [stage 1: tap 3 times] | !{0} tap 1 3 2 3 1 [stage 2: tap when the highlight is in these positions] | !{0} reset";
 #pragma warning restore 0414
 
     private IEnumerator ProcessTwitchCommand(string command)
@@ -422,23 +422,17 @@ public class SapphireButtonScript : MonoBehaviour
         }
 
         Match m;
-        if (_stage == Stage.Bitmaps && (m = Regex.Match(command, @"^\s*tap\s+([0123])\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
+        if (_stage == Stage.Bitmaps && (m = Regex.Match(command, @"^\s*tap\s+([1234])\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             yield return null;
             var des = m.Groups[1].Value[0] - '0';
-
-            // If we’re already in the relevant second, wait for the next one because we might not get the button release in quickly enough
-            while ((int) BombInfo.GetTime() % 4 == des)
-                yield return null;
-
-            // Wait for the relevant second
-            while ((int) BombInfo.GetTime() % 4 != des)
-                yield return null;
-
-            ButtonSelectable.OnInteract();
-            yield return new WaitForSeconds(.1f);
-            ButtonSelectable.OnInteractEnded();
-            yield return new WaitForSeconds(.1f);
+            for (var i = 0; i < des; i++)
+            {
+                ButtonSelectable.OnInteract();
+                yield return new WaitForSeconds(.1f);
+                ButtonSelectable.OnInteractEnded();
+                yield return new WaitForSeconds(.1f);
+            }
             yield break;
         }
 
