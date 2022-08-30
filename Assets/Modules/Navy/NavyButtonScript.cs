@@ -141,6 +141,7 @@ public class NavyButtonScript : MonoBehaviour
         {
             case Stage.GreekLetters:
                 _stage = Stage.Numbers;
+                _numTaps = 0;
                 break;
 
             case Stage.Numbers:
