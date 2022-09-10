@@ -35,3 +35,4 @@ Lib/bin/
 Lib/obj/
 Lib/packages/
 !Lib/*.sln
+!Lib/*.csproj
