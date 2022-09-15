@@ -56,6 +56,7 @@ namespace BlueButtonLib
             var rightConstraints = Enumerable.Range(0, _sz * _sz).Where(ix => ix % _sz < _sz - 1 && latinSquare[ix + 1] < latinSquare[ix]).Select(ix => (sm: ix + 1, la: ix));
             var downConstraints = Enumerable.Range(0, _sz * _sz).Where(ix => ix / _sz < _sz - 1 && latinSquare[ix + _sz] < latinSquare[ix]).Select(ix => (sm: ix + _sz, la: ix));
             var leftConstraints = Enumerable.Range(0, _sz * _sz).Where(ix => ix % _sz > 0 && latinSquare[ix - 1] < latinSquare[ix]).Select(ix => (sm: ix - 1, la: ix));
+            newConstraints:
             var constraints = upConstraints.Concat(rightConstraints).Concat(downConstraints).Concat(leftConstraints).ToArray().Shuffle(rnd);
             var competingLatinSquares = FindSolutions(new int?[_sz * _sz], constraints).ToArray();
 
@@ -124,7 +125,10 @@ namespace BlueButtonLib
                     return new NavyButtonPuzzle(latinSquare, givenIx, latinSquare[givenIx], greekLetterIxs, sqDists,
                         new[] { n0, n1, n2, n3candidates[rnd.Next(0, n3candidates.Count)] }, stencils.Concat(new[] { decoyStencilIx }).ToArray(), word);
             }
-            throw new InvalidOperationException();
+
+            // In rare cases, no permutation of the constraints works to produce a valid set of numbers in Stage 2.
+            // A known such case is seed 836415927. In this case, selecting a different set of constraints for the same Latin square works.
+            goto newConstraints;
         }
 
         private static IEnumerable<int[]> FindSolutions(int?[] sofar, (int sm, int la)[] constraints)
