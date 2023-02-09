@@ -159,8 +159,6 @@ public class BlueButtonScript : MonoBehaviour
 
             case Stage.Suits:
                 _suitTapTimes[_suitTapIx] = Time.time;
-                if (_suitTapIx > 0)
-                    Debug.LogFormat(@"<The Blue Button #{0}> Interval {1} = {2}", _moduleId, "RAB"[_suitTapIx - 1], _suitTapTimes[_suitTapIx] - _suitTapTimes[_suitTapIx - 1]);
                 _suitTapIx++;
                 if (_suitTapIx == 4)
                 {
@@ -685,6 +683,7 @@ public class BlueButtonScript : MonoBehaviour
             Debug.LogFormat(@"[The Blue Button #{0}] Stage 3: Equation #{1}: {2} (offset {3} = {4}).", _moduleId, i + 1, _equations[i], _equationOffsets[i], explanations[i]);
 
         Debug.LogFormat(@"[The Blue Button #{0}] Stage 4: Suits are shown as {1}. Desired order is {2}.", _moduleId, _suitsCurrent.Select(s => "♠♥♣♦"[s]).Join(""), _suitsGoal.Select(s => "♠♥♣♦"[s]).Join(""));
+        Debug.LogFormat(@"[The Blue Button #{0}] Stage 4: Fillings translate to {1}.", _moduleId, puzzle.Jumps.Join(", "));
         Debug.LogFormat(@"[The Blue Button #{0}] Stage 5: The solution word is {1}.", _moduleId, _word);
     }
 
