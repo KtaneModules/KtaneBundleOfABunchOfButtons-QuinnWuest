@@ -35,6 +35,7 @@ public class WhiteButtonScript : MonoBehaviour
     private int[][] _colorValues = new int[2][] { new int[3], new int[3] };
     private bool _isAnimating;
     private bool _ignored;
+    private const int _maxHoldCount = 5;
 
     private void Start()
     {
@@ -82,9 +83,9 @@ public class WhiteButtonScript : MonoBehaviour
             return;
         if (_timerTickCheck != null)
             StopCoroutine(_timerTickCheck);
-        if (_holdCount >= 5)
+        if (_holdCount >= _maxHoldCount)
         {
-            Debug.LogFormat("[The White Button #{0}] Held the button for at least 5 timer ticks. Issuing a reset.", _moduleId);
+            Debug.LogFormat("[The White Button #{0}] Held the button for at least {1} timer ticks. Issuing a reset.", _moduleId, _maxHoldCount);
             _isAnimating = true;
             StartCoroutine(Reset());
             return;
@@ -195,7 +196,7 @@ public class WhiteButtonScript : MonoBehaviour
         for (int i = 1; i < parameters.Count(); i++)
         {
             int val;
-            if (!int.TryParse(parameters[i], out val) || val < 0 || val > 4)
+            if (!int.TryParse(parameters[i], out val) || val < 0 || val > _maxHoldCount)
                 yield break;
             list.Add(val);
         }
@@ -223,7 +224,7 @@ public class WhiteButtonScript : MonoBehaviour
         {
             WhiteButtonSelectable.OnInteract();
             time = (int)BombInfo.GetTime();
-            while (time - 4 != (int)BombInfo.GetTime())
+            while (time - _maxHoldCount != (int)BombInfo.GetTime())
                 yield return null;
             WhiteButtonSelectable.OnInteractEnded();
             goto next;
@@ -237,7 +238,7 @@ public class WhiteButtonScript : MonoBehaviour
                 {
                     WhiteButtonSelectable.OnInteract();
                     time = (int)BombInfo.GetTime();
-                    while (time - 4 != (int)BombInfo.GetTime())
+                    while (time - _maxHoldCount != (int)BombInfo.GetTime() || time + _maxHoldCount != (int)BombInfo.GetTime())
                         yield return null;
                     WhiteButtonSelectable.OnInteractEnded();
                     goto next;
@@ -247,8 +248,10 @@ public class WhiteButtonScript : MonoBehaviour
         next:
         WhiteButtonSelectable.OnInteract();
         time = (int)BombInfo.GetTime();
-        while (time - 1 != (int)BombInfo.GetTime())
+        while (time - 1 != (int)BombInfo.GetTime() && time + 1 != (int)BombInfo.GetTime())
+        {
             yield return null;
+        }
         WhiteButtonSelectable.OnInteractEnded();
         while (_input.Count < 3)
         {
