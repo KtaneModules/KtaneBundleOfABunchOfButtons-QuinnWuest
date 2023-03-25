@@ -329,7 +329,7 @@ public class YellowButtonScript : MonoBehaviour
         foreach (var dir in dirs)
         {
             while (_curDirection != dir)
-                yield return null;
+                yield return "trycancel";
             ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
             ButtonSelectable.OnInteractEnded();
