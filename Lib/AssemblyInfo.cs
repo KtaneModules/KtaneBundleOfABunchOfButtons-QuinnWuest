@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BlueButtonLib")]
-[assembly: AssemblyDescription("Library containing code for the KTANE module “The Blue Button”.")]
+[assembly: AssemblyTitle("BunchOfButtonsLib")]
+[assembly: AssemblyDescription("Library containing code for the KTANE mod “Bundle of a Bunch of Buttons”.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BlueButtonLib")]
+[assembly: AssemblyProduct("BunchOfButtonsLib")]
 [assembly: AssemblyCopyright("Copyright © Timwi 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

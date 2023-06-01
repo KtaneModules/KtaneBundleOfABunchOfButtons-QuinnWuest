@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4C3C8D4A-C793-467E-B02A-2ADC1937A9FF}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>BlueButtonLib</RootNamespace>
-    <AssemblyName>BlueButtonLib</AssemblyName>
+    <RootNamespace>BunchOfButtonsLib</RootNamespace>
+    <AssemblyName>BunchOfButtonsLib</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

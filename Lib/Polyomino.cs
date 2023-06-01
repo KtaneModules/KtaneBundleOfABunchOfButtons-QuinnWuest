@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BlueButtonLib
+namespace BunchOfButtonsLib
 {
     public class Polyomino : IEquatable<Polyomino>
     {

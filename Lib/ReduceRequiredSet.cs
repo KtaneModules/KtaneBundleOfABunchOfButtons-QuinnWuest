@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BlueButtonLib
+namespace BunchOfButtonsLib
 {
     static partial class Ut
     {

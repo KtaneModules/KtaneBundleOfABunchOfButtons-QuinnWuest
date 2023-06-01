@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlueButtonLib
+namespace BunchOfButtonsLib
 {
     public struct PolyominoPlacement : IEquatable<PolyominoPlacement>
     {

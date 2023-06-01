@@ -1,4 +1,4 @@
-﻿namespace BlueButtonLib
+﻿namespace BunchOfButtonsLib
 {
     internal static class WordLists
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace BlueButtonLib
+namespace BunchOfButtonsLib
 {
     public class AzureButtonPuzzle
     {

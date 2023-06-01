@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace BlueButtonLib
+namespace BunchOfButtonsLib
 {
     public static class NavyButtonData
     {
