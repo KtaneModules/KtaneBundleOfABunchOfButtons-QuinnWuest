@@ -38,7 +38,7 @@ public class CornflowerButtonScript : MonoBehaviour
 
     private readonly int[] _arrowPositions = { 0, 0, 0 };
     private readonly float[] _arrowAngles = { 0, 0, 0 };
-    private readonly float[] _desiredArrowAngles = { 0, 0, 0 };
+    private readonly int[] _desiredArrowAngles = { 0, 0, 0 };
     private float _mainArrowAngle;
     private int _selectedArrows;
     private Component _lastHighlighted;
@@ -56,15 +56,15 @@ public class CornflowerButtonScript : MonoBehaviour
 
         do
         {
-            _arrowPositions[0] = Rnd.Range(0, 3);
+            _arrowPositions[0] = Rnd.Range(0, 5);
             _arrowPositions[1] = Rnd.Range(0, 5);
-            _arrowPositions[2] = Rnd.Range(0, 7);
+            _arrowPositions[2] = Rnd.Range(0, 5);
         }
         while (_arrowPositions.All(p => p == 0));
 
-        _desiredArrowAngles[0] = _arrowPositions[0] * 360f / 3;
-        _desiredArrowAngles[1] = _arrowPositions[1] * 360f / 5;
-        _desiredArrowAngles[2] = _arrowPositions[2] * 360f / 7;
+        _desiredArrowAngles[0] = _arrowPositions[0] * 72;
+        _desiredArrowAngles[1] = _arrowPositions[1] * 72;
+        _desiredArrowAngles[2] = _arrowPositions[2] * 72;
 
         _ignoreList = BossModule.GetIgnoredModules(Module, _defaultIgnoreList);
 
@@ -284,8 +284,8 @@ public class CornflowerButtonScript : MonoBehaviour
         for (var i = 0; i < 2; i++)
         {
             var pos = (_selectedArrows + i) % 3;
-            _arrowPositions[pos] = (_arrowPositions[pos] + 1) % (2 * pos + 3);
-            _desiredArrowAngles[pos] += 360f / (2 * pos + 3);
+            _arrowPositions[pos] = (_arrowPositions[pos] + 1) % 5;
+            _desiredArrowAngles[pos] += 72;
         }
 
         if (_arrowPositions.All(p => p == 0))
@@ -325,37 +325,21 @@ public class CornflowerButtonScript : MonoBehaviour
         return type != null && (type.Name == name || HasBaseType(type.BaseType, name));
     }
 
+    // Unused function used only for debugging
     private List<string> Dump(GameObject obj)
     {
         var deepTypes = new string[] { };
 
-        var strs = new List<string>();
-        strs.Add(string.Format("- {0}:", obj.name));
+        var strs = new List<string> { string.Format("- {0}:", obj.name) };
         foreach (var component in obj.GetComponents<Component>())
         {
             strs.Add(string.Format("      • {0}", component.GetType().FullName));
-            //if (component is Transform)
-            //{
-            //    var ea = ((Transform) component).localEulerAngles;
-            //    strs.Add(string.Format("          = LEA=({0}, {1}, {2})", ea.x, ea.y, ea.z));
-            //}
             if (deepTypes.Contains(component.GetType().FullName))
             {
                 foreach (var field in component.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
                 {
                     var val = field.GetValue(component);
                     strs.Add(string.Format("          - {4}.{0} ({1}) = {2} ({3})", field.Name, field.FieldType, val ?? "<null>", val == null ? "<null>" : val.GetType().FullName, field.DeclaringType.FullName));
-                    //if (val is IEnumerable)
-                    //{
-                    //    var ix = 0;
-                    //    foreach (var elem in (IEnumerable) val)
-                    //    {
-                    //        var tr = elem as Transform;
-                    //        strs.Add(string.Format("              - [{0}] = {1} ({2}){3}", ix, elem ?? "<null>", elem == null ? "<null>" : elem.GetType().FullName,
-                    //            tr != null ? string.Format(" LEA=({0}, {1}, {2})", tr.localEulerAngles.x, tr.localEulerAngles.y, tr.localEulerAngles.z) : null));
-                    //        ix++;
-                    //    }
-                    //}
                 }
             }
         }
