@@ -111,8 +111,8 @@ public class AzureButtonScript : MonoBehaviour
 
         var offsets = new[] { _puzzle.DecoyArrowPosition, 0, 1, 2, 3 };
         Func<int, string> getGridSvg = new Func<int, string>(gridIx =>
-            string.Format("<g fill='#0f0' fill-opacity='.2'>{1}</g><path stroke-width='.1' d='M0 0h4v4h-4z' /><path stroke-width='.05' d='M1 0v4M2 0v4M3 0v4M0 1h4M0 2h4M0 3h4' /><g fill='#ccc' stroke='none'>{0}</g>",
-                Enumerable.Range(0, 16).Select(cell => string.Format("<text{3} x='{1}' y='{2}'>{0}</text>", _puzzle.Grid[cell], (cell % 4) + .5, (cell / 4) + .8, _puzzle.Arrows[gridIx].Coordinates.Any(c => c.AddWrap(offsets[gridIx], offsets[gridIx]).Index == cell) ? " fill='#080'" : "")).Join(""),
+            string.Format("<g class='highlights'>{1}</g><path stroke-width='.1' d='M0 0h4v4h-4z' /><path stroke-width='.05' d='M1 0v4M2 0v4M3 0v4M0 1h4M0 2h4M0 3h4' /><g class='labels'>{0}</g>",
+                Enumerable.Range(0, 16).Select(cell => string.Format("<text{3} x='{1}' y='{2}'>{0}</text>", _puzzle.Grid[cell], (cell % 4) + .5, (cell / 4) + .8, _puzzle.Arrows[gridIx].Coordinates.Any(c => c.AddWrap(offsets[gridIx], offsets[gridIx]).Index == cell) ? " class='highlighted'" : "")).Join(""),
                 _puzzle.Arrows[gridIx].Coordinates.Select(c => c.AddWrap(offsets[gridIx], offsets[gridIx])).Select(c => string.Format("<rect x='{0}' y='{1}' width='1' height='1'/>", c.X, c.Y)).Join("")));
 
         var arrowsSvg = new StringBuilder();
@@ -130,40 +130,38 @@ public class AzureButtonScript : MonoBehaviour
                 dots.AppendFormat("<circle r='.1' cx='{0}' cy='{1}' />", arrow.Directions.Take(i).Sum(d => dxs[d]), arrow.Directions.Take(i).Sum(d => dys[d]));
             }
             arrowsSvg.AppendFormat(
-                "<g fill='none' stroke='black' stroke-width='.05' transform='translate({0}, 0)'>" +
+                "<g fill='none' stroke-width='.05' transform='translate({0}, 0)'>" +
                     "{1}" +
-                    "<g clip-path='url(#grid-clip-{9})'>" +
-                        "<g transform='translate({7}, {7})'>" +
-                            "<g id='arr-{9}-{10}'>" +
-                                "<circle r='.4' />" +
-                                "<path d='{2}' />" +
-                                "<path d='M-.15 .3 0 0 .15 .3' transform='translate({3}, {4}) rotate({5})'/>" +
-                                "<g fill='black' stroke='none'>{6}</g>" +
-                            "</g>" +
-                            "<use href='#arr-{9}-{10}' transform='translate(-4, -4)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(-4, 0)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(-4, 4)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(0, -4)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(0, 4)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(4, -4)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(4, 0)' />" +
-                            "<use href='#arr-{9}-{10}' transform='translate(4, 4)' />" +
-                        "</g>" +
+                    "<g clip-path='url(#grid-clip-{4})'>" +
+                        "<g class='arrow' transform='translate({2}, {2})'><circle r='.4' />{5}</g>" +
                     "</g>" +
-                    "<g font-size='.7' fill='black' stroke='none'>{8}</g>" +
+                    "<g class='labels' font-size='.7' stroke='none'>{3}</g>" +
                 "</g>",
                 4.5 * gridIx,  // horizontal position
                 getGridSvg(gridIx),    // grid
-                path,   // arrow line
-                arrow.Directions.Sum(d => dxs[d]), arrow.Directions.Sum(d => dys[d]), 45 * arrow.Directions.Last(), // arrow head
-                dots,   // dots on the arrow
                 offsets[gridIx] + .5,  // position of the arrow
                 gridIx == 0 ? "<text x='2' y='4.8'>(decoy)</text>" : string.Format("<text x='2' y='4.8'>{0} = {1}</text>", ternary(_puzzle.SolutionWord[gridIx - 1] - 'A' + 1, 3), _puzzle.SolutionWord[gridIx - 1]), // bottom label
-                _moduleId, gridIx  // SVG object ID
+                _moduleId,  // part of clip ID
+
+                // 9 copies of the arrow
+                Enumerable.Range(0, 9).Select(ix => string.Format(
+                    "<g transform='translate({5}, {6})'>" +
+                        "<path d='{0}' />" +
+                        "<path d='M-.15 .3 0 0 .15 .3' transform='translate({1}, {2}) rotate({3})'/>" +
+                        "<g class='dots' stroke='none'>{4}</g>" +
+                    "</g>",
+                    path,   // arrow line
+                    arrow.Directions.Sum(d => dxs[d]),  // arrow head X
+                    arrow.Directions.Sum(d => dys[d]),  // arrow head Y
+                    45 * arrow.Directions.Last(), // arrow head angle
+                    dots,   // dots on the arrow
+                    4 * (ix % 3 - 1), // transform X
+                    4 * (ix / 3 - 1)  // transform Y
+                )).Join("")
             );
         }
 
-        Debug.LogFormat(@"[The Azure Button #{0}]=svg[Stage 3: Grid and arrows:]<svg xmlns='http://www.w3.org/2000/svg' viewBox='-.2 -.2 22.4 5.4' text-anchor='middle' font-size='.9'><defs><clipPath id='grid-clip-{0}'><rect x='0' y='0' width='4' height='4' /></clipPath></defs>{1}</svg>",
+        Debug.LogFormat(@"[The Azure Button #{0}]=svg[Stage 3: Grid and arrows:]<svg class='azure-button' xmlns='http://www.w3.org/2000/svg' viewBox='-.2 -.2 22.4 5.4' text-anchor='middle' font-size='.9'><defs><clipPath id='grid-clip-{0}'><rect x='0' y='0' width='4' height='4' /></clipPath></defs>{1}</svg>",
             _moduleId, arrowsSvg);
 
         Debug.LogFormat(@"[The Azure Button #{0}] Stage 4: Answer is {1}", _moduleId, _puzzle.SolutionWord);
