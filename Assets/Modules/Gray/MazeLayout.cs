@@ -94,5 +94,32 @@ namespace GrayButton
 
             return new MazeLayout { _w = w, _h = h, _canGoDownData = canGoDown, _canGoRightData = canGoRight };
         }
+
+        public List<MazeDistanceResult> FindPositionsAtMaxDistance(int startPos, int maxDist)
+        {
+            var results = new List<MazeDistanceResult>();
+            var q = new Queue<int>();
+            var dist = new Dictionary<int, int>();
+            q.Enqueue(startPos);
+            dist[startPos] = 0;
+            while (q.Count > 0)
+            {
+                var cell = q.Dequeue();
+                if (dist[cell] > maxDist)
+                    return results;
+                results.Add(new MazeDistanceResult { Cell = cell, Distance = dist[cell] });
+                for (var dir = 0; dir < 4; dir++)
+                {
+                    if (!CanGo(cell, dir))
+                        continue;
+                    var newCell = Move(cell, dir);
+                    if (dist.ContainsKey(newCell))
+                        continue;
+                    dist[newCell] = dist[cell] + 1;
+                    q.Enqueue(newCell);
+                }
+            }
+            return results;
+        }
     }
 }
