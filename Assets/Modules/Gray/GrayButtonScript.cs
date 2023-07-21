@@ -125,7 +125,8 @@ public class GrayButtonScript : MonoBehaviour
                 Debug.LogFormat(@"[The Gray Button #{0}] You held the button for {1}. Module solved.", _moduleId, holdTimes);
                 Module.HandlePass();
                 _moduleSolved = true;
-                GrayButtonText.text = "";
+                GrayButtonText.fontSize = 70;
+                GrayButtonText.text = "SOLVED";
             }
             _input.Clear();
             SetLeds();
