@@ -25,7 +25,11 @@ public class GlitchedButtonScript : MonoBehaviour
     private bool _moduleSolved;
 
     private string _cyclingBits;
-    private int _solution;
+    private int _highlightedBit;
+    private int _seqIx;
+    private int _flippedBit;
+    private int _holdIx;
+    private bool _isHeld;
 
     private void Start()
     {
@@ -43,9 +47,9 @@ public class GlitchedButtonScript : MonoBehaviour
         var rnd = RuleSeedable.GetRNG();
         Debug.LogFormat("[The Glitched Button #{0}] Using rule seed: {1}.", _moduleId, rnd.Seed);
 
-        const int bitLength = 12;
+        const int bitLength = 16;
         var results = new List<int>();
-        while (results.Count < 15)
+        while (results.Count < 16)
         {
             var all = Enumerable.Range(0, 1 << bitLength)
                 .Where(v =>
@@ -61,7 +65,7 @@ public class GlitchedButtonScript : MonoBehaviour
                 })
                 .ToList();
             results.Clear();
-            while (all.Count > 0 && results.Count < 15)
+            while (all.Count > 0 && results.Count < 16)
             {
                 var rndIx = rnd.Next(0, all.Count);
                 var bits = all[rndIx];
@@ -76,16 +80,18 @@ public class GlitchedButtonScript : MonoBehaviour
         // END RULE SEED
 
 
-        var seqIx = Rnd.Range(0, results.Count);
-        var seq = results[seqIx];
-        Debug.LogFormat("[The Glitched Button #{0}] Selected bit sequence “{1}” (#{2}).", _moduleId, Convert.ToString(seq, 2).PadLeft(bitLength, '0'), seqIx);
+        _seqIx = Rnd.Range(0, results.Count);
+        var seq = results[_seqIx];
+        Debug.LogFormat("[The Glitched Button #{0}] Selected bit sequence “{1}” (#{2}).", _moduleId, Convert.ToString(seq, 2).PadLeft(bitLength, '0'), _seqIx);
 
-        var flippedBit = Rnd.Range(0, bitLength);
-        _cyclingBits = Convert.ToString(seq ^ (1 << flippedBit), 2).PadLeft(bitLength, '0');
-        Debug.LogFormat("[The Glitched Button #{0}] Showing bit sequence “{1}” (flipped bit is #{2}).", _moduleId, _cyclingBits, 12 - flippedBit);
+        _flippedBit = Rnd.Range(0, bitLength);
+        _cyclingBits = Convert.ToString(seq ^ (1 << _flippedBit), 2).PadLeft(bitLength, '0');
+        Debug.LogFormat("[The Glitched Button #{0}] Showing bit sequence “{1}” (flipped bit is #{2}).", _moduleId, _cyclingBits, 12 - _flippedBit);
 
-        _solution = (seqIx + 12 - flippedBit) % 15;
-        Debug.LogFormat("[The Glitched Button #{0}] Tap on XX:{1:00} or XX:{2:00} or XX:{3:00} or XX:{4:00}.", _moduleId, _solution, _solution + 15, _solution + 30, _solution + 45);
+        Debug.LogFormat("[The Glitched Button #{0}] Solution: {1}. () = hold, [] = release.", _moduleId, _cyclingBits
+            .Select((ch, ix) => ix == _flippedBit ? string.Format("({0})", ch) : ch.ToString())
+            .Select((ch, ix) => ix == _seqIx ? string.Format("[{0}]", ch) : ch)
+            .Join(""));
 
         Text.text = _cyclingBits;
         StartCoroutine(CycleBits());
@@ -101,31 +107,41 @@ public class GlitchedButtonScript : MonoBehaviour
         var isSolved = false;
         var solveStartTime = 0f;
         var fadeDuration = 4.7f;
+        var scrollTime = 0.7f;
+
+        _highlightedBit = 8;
 
         while (!isSolved || (Time.time - solveStartTime) < fadeDuration)
         {
             float time = Time.time;
             Vector3 start = Text.transform.localPosition;
             Vector3 end = Text.transform.localPosition + new Vector3(-.016f, 0f, 0f);
-            while (time + 0.25f > Time.time)
+            _highlightedBit = (_highlightedBit + 1) % 16;
+            while (time + scrollTime > Time.time)
             {
-                Text.transform.localPosition = Vector3.Lerp(start, end, (Time.time - time) / 0.25f);
+                Text.transform.localPosition = Vector3.Lerp(start, end, (Time.time - time) / scrollTime);
+                var breakIx = (_highlightedBit + 8) % 16;
+                var cycled = _cyclingBits.Substring(breakIx) + _cyclingBits.Substring(0, breakIx);
+                if (!_moduleSolved)
+                {
+                    cycled = cycled.Insert(9, "</color>");
+                    cycled = cycled.Insert(8, "<color=#9999ff>");
+                }
+                Text.text = cycled;
+
+                if (isSolved)
+                {
+                    var v = 1 - ((Time.time - solveStartTime) / fadeDuration);
+                    Text.color = new Color(0, v, 0, 1);
+                }
                 yield return null;
             }
             Text.transform.localPosition = start;
-            Text.text = Text.text.Substring(1) + Text.text[0];
-            yield return null;
 
             if (_moduleSolved && !isSolved)
             {
                 solveStartTime = Time.time;
                 isSolved = true;
-            }
-
-            if (isSolved)
-            {
-                var v = 1 - ((Time.time - solveStartTime) / fadeDuration);
-                Text.color = new Color(v, v, v, 1);
             }
         }
     }
@@ -145,23 +161,8 @@ public class GlitchedButtonScript : MonoBehaviour
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
-
-        if (_moduleSolved)
-            return false;
-
-        if ((int) (Bomb.GetTime() % 15f) == _solution)
-        {
-            Debug.LogFormat("[The Glitched Button #{0}] Good job! Module solved.", _moduleId);
-            Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
-            _moduleSolved = true;
-            Module.HandlePass();
-        }
-        else
-        {
-            Debug.LogFormat("[The Glitched Button #{0}] You pressed at XX:{1:00}. Strike!", _moduleId, (int) Bomb.GetTime() % 15);
-            Module.HandleStrike();
-        }
-
+        _isHeld = true;
+        _holdIx = _highlightedBit;
         return false;
     }
 
@@ -169,6 +170,29 @@ public class GlitchedButtonScript : MonoBehaviour
     {
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
         StartCoroutine(AnimateButton(-0.05f, 0f));
+        _isHeld = false;
+        if (_moduleSolved)
+            return;
+
+        var input = _cyclingBits
+            .Select((ch, ix) => ix == _holdIx ? string.Format("({0})", ch) : ch.ToString())
+            .Select((ch, ix) => ix == _highlightedBit ? string.Format("[{0}]", ch) : ch)
+            .Join("");
+
+        if (_holdIx == _flippedBit && _highlightedBit == _seqIx)
+        {
+            Debug.LogFormat("[The Glitched Button #{0}] Correct input: {1}. Module solved.",
+                _moduleId, input);
+            Module.HandlePass();
+            _moduleSolved = true;
+            Text.color = new Color(0, 1, 0, 1);
+        }
+        else if (!_isAutosolving)
+        {
+            Debug.LogFormat("[The Glitched Button #{0}] Incorrect input: {1}. Strike.",
+                _moduleId, input);
+            Module.HandleStrike();
+        }
     }
 
     private IEnumerator AnimateButton(float a, float b)
@@ -185,35 +209,63 @@ public class GlitchedButtonScript : MonoBehaviour
     }
 
 #pragma warning disable 0414
-    private readonly string TwitchHelpMessage = "!{0} tap on 56 [Submits at that time]";
+    private readonly string TwitchHelpMessage = "!{0} hold 00100 [Hold on the last digit of that sequence.] | !{0} release 00111 [Release on the last digit of that sequence.]";
 #pragma warning restore 0414
 
     private IEnumerator ProcessTwitchCommand(string command)
     {
-        if (_moduleSolved)
-            yield break;
-
-        var m = Regex.Match(command, @"^\s*(?:press|tap|push|submit)?\s*(?:on|at)?\s*(\d\d?)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        var m = Regex.Match(command, @"^\s*(?<action>hold|release)\s+(?<bits>[01]+)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         if (!m.Success)
             yield break;
-
-        int i;
-        if (!int.TryParse(m.Groups[1].Value, out i) || i < 0 || i >= 60)
+        var isHold = m.Groups["action"].Value.EqualsIgnoreCase("hold");
+        if (isHold == _isHeld)
+        {
+            yield return "sendtochaterror " + (_isHeld ? "The button is already being held." : "The button has not been held yet.");
             yield break;
+        }
+        var inputBits = m.Groups["bits"].Value;
+        var str = _cyclingBits + _cyclingBits;
+        var p1 = str.IndexOf(inputBits);
+        if (p1 == -1)
+        {
+            yield return string.Format("sendtochaterror {0} is not found in the sequence.", inputBits);
+            yield break;
+        }
+        var p2 = str.IndexOf(inputBits, p1 + 1);
+        if (p2 != -1 && p2 % 16 != p1)
+        {
+            yield return string.Format("sendtochaterror {0} is found in the sequence multiple times.", inputBits);
+            yield break;
+        }
         yield return null;
-        while ((int) Bomb.GetTime() % 60 != i)
+        while (_highlightedBit != (p1 + inputBits.Length - 1) % 16)
             yield return "trycancel";
-        GlitchedButtonSelectable.OnInteract();
-        yield return new WaitForSeconds(.1f);
-        GlitchedButtonSelectable.OnInteractEnded();
+        if (isHold)
+            GlitchedButtonSelectable.OnInteract();
+        else
+            GlitchedButtonSelectable.OnInteractEnded();
     }
+
+    private bool _isAutosolving;
 
     public IEnumerator TwitchHandleForcedSolve()
     {
-        while ((int) Bomb.GetTime() % 15f != _solution)
+        _isAutosolving = true;
+        if (_isHeld && _holdIx != _flippedBit)
+        {
+            // Tank fake strike
+            GlitchedButtonSelectable.OnInteractEnded();
+            yield return new WaitForSeconds(0.1f);
+        }
+        if (!_isHeld)
+        {
+            while (_highlightedBit != _flippedBit)
+                yield return true;
+            GlitchedButtonSelectable.OnInteract();
+        }
+        while (_highlightedBit != _seqIx)
             yield return true;
-        GlitchedButtonSelectable.OnInteract();
-        yield return new WaitForSeconds(.1f);
         GlitchedButtonSelectable.OnInteractEnded();
+        yield break;
     }
 }
