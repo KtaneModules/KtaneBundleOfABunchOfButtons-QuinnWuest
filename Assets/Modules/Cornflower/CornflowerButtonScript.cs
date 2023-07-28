@@ -38,7 +38,6 @@ public class CornflowerButtonScript : MonoBehaviour
 
     private readonly int[] _arrowPositions = { 0, 0, 0 };
     private readonly float[] _arrowAngles = { 0, 0, 0 };
-    private readonly int[] _desiredArrowAngles = { 0, 0, 0 };
     private float _mainArrowAngle;
     private int _selectedArrows;
     private Component _lastHighlighted;
@@ -61,10 +60,6 @@ public class CornflowerButtonScript : MonoBehaviour
             _arrowPositions[2] = Rnd.Range(0, 5);
         }
         while (_arrowPositions.All(p => p == 0));
-
-        _desiredArrowAngles[0] = _arrowPositions[0] * 72;
-        _desiredArrowAngles[1] = _arrowPositions[1] * 72;
-        _desiredArrowAngles[2] = _arrowPositions[2] * 72;
 
         _ignoreList = BossModule.GetIgnoredModules(Module, _defaultIgnoreList);
 
@@ -123,10 +118,22 @@ public class CornflowerButtonScript : MonoBehaviour
         foreach (var parent in selectableParents)
         {
             AssignDelegate(parent, _onDefocusField, HandleDefocus(parent));
-            RediscoverSelectables(parent);
+            RediscoverSelectables(parent, false);
+            StartCoroutine(PeriodicSelectableDiscovery(parent));
         }
         setSelectedArrows(0);
+        setCurSelectable(Rnd.Range(0, _selectables.Count));
         _initialized = true;
+    }
+
+    private IEnumerator PeriodicSelectableDiscovery(Component parent)
+    {
+        yield return new WaitForSeconds(Rnd.Range(0f, 10f));
+        while (true)
+        {
+            RediscoverSelectables(parent, true);
+            yield return new WaitForSeconds(10f);
+        }
     }
 
     private Action HandleDefocus(Component parent)
@@ -154,9 +161,7 @@ public class CornflowerButtonScript : MonoBehaviour
 
     private Vector3 childPos(Component child)
     {
-        var renderer = child.GetComponent<Renderer>();
-        if (renderer == null)
-            renderer = child.GetComponentInChildren<Renderer>();
+        var renderer = child.GetComponent<Renderer>() ?? child.GetComponentInChildren<Renderer>();
         return renderer != null ? renderer.bounds.center : child.transform.position;
     }
 
@@ -180,8 +185,9 @@ public class CornflowerButtonScript : MonoBehaviour
         return arr == null ? null : arr.Cast<Component>().ToArray();
     }
 
-    private void RediscoverSelectables(Component parent)
+    private void RediscoverSelectables(Component parent, bool findNewSelectable)
     {
+        Debug.LogFormat("<> RediscoverSelectables({0})", parent.name);
         var has = _selectables.Count > 0;
         var oldPair = has ? _selectables[_curSelectable] : default(ParentChildPair);
         var oldDist = has ? childDist(_selectables[_curSelectable].Child) : 0;
@@ -211,17 +217,21 @@ public class CornflowerButtonScript : MonoBehaviour
             }
         SortSelectables();
 
-
-        int newSelectable = 0;
-        if (has)
+        int newSelectable = _curSelectable;
+        if (findNewSelectable)
         {
-            int p;
-            if ((p = _selectables.IndexOf(pair => ReferenceEquals(pair.Parent, oldPair.Parent) && ReferenceEquals(pair.Child, oldPair.Child) && pair.Child.gameObject.activeInHierarchy)) != -1)
-                _curSelectable = p;
-            else if ((p = _selectables.IndexOf(pair => childDist(pair.Child) >= oldDist && pair.Child.gameObject.activeInHierarchy)) != -1)
-                _curSelectable = p;
+            newSelectable = 0;
+            if (has)
+            {
+                int p;
+                if ((p = _selectables.IndexOf(pair => ReferenceEquals(pair.Parent, oldPair.Parent) && ReferenceEquals(pair.Child, oldPair.Child) && pair.Child.gameObject.activeInHierarchy)) != -1)
+                    newSelectable = p;
+                else if ((p = _selectables.IndexOf(pair => childDist(pair.Child) >= oldDist && pair.Child.gameObject.activeInHierarchy)) != -1)
+                    newSelectable = p;
+            }
+            setCurSelectable(newSelectable);
         }
-        setCurSelectable(newSelectable);
+        Debug.LogFormat("<> RediscoverSelectables result:\n{0}", Enumerable.Range(0, _selectables.Count).Select(ix => string.Format("  {0} {1} {2}", ix == newSelectable ? "→" : " ", GetObjectPath(_selectables[ix].Child.transform), _selectables[ix].Child.gameObject.activeInHierarchy ? "✓" : "✗")).Join("\n"));
     }
 
     private void SortSelectables()
@@ -243,11 +253,16 @@ public class CornflowerButtonScript : MonoBehaviour
         _selectables = newList;
     }
 
+    private ParentChildPair _prevSelectablePair;
     private void setCurSelectable(int newSelectable)
     {
+        if (_selectables.Count == 0)
+            return;
+        var newSelectablePair = _selectables[newSelectable];
+        if (!ReferenceEquals(newSelectablePair.Parent, _prevSelectablePair.Parent) || !ReferenceEquals(newSelectablePair.Child, _prevSelectablePair.Child))
+            Debug.LogFormat("[The Cornflower Button #{0}] Target selectable: {1}", _moduleId, GetObjectPath(newSelectablePair.Child.transform));
+        _prevSelectablePair = newSelectablePair;
         _curSelectable = newSelectable;
-        if (_selectables.Count != 0)
-            Debug.LogFormat("[The Cornflower Button #{0}] Target selectable: {1}", _moduleId, GetObjectPath(_selectables[_curSelectable].Child.transform));
     }
 
     private string GetObjectPath(Transform tr)
@@ -258,13 +273,15 @@ public class CornflowerButtonScript : MonoBehaviour
             s.Add(tr.name);
             tr = tr.parent;
         }
-        return s.AsEnumerable().Reverse().Join(" → ");
+        s.Reverse();
+        return s.Join(" → ");
     }
 
     private IEnumerator endHighlight(Component child)
     {
         yield return null;
-        _lastHighlighted = null;
+        if (ReferenceEquals(_lastHighlighted, child))
+            _lastHighlighted = null;
     }
 
     private void AssignDelegate(object obj, FieldInfo field, Action action)
@@ -285,11 +302,11 @@ public class CornflowerButtonScript : MonoBehaviour
         {
             var pos = (_selectedArrows + i) % 3;
             _arrowPositions[pos] = (_arrowPositions[pos] + 1) % 5;
-            _desiredArrowAngles[pos] += 72;
         }
 
         if (_arrowPositions.All(p => p == 0))
         {
+            Debug.LogFormat("[The Cornflower Button #{0}] Module solved.", _moduleId);
             Module.HandlePass();
             _moduleSolved = true;
         }
@@ -303,15 +320,17 @@ public class CornflowerButtonScript : MonoBehaviour
 
         for (var i = 0; i < 3; i++)
         {
-            _arrowAngles[i] = Mathf.Lerp(_arrowAngles[i], _desiredArrowAngles[i], 4 * Time.deltaTime);
+            _arrowAngles[i] = Mathf.Lerp(_arrowAngles[i], _arrowPositions[i] * 72, 4 * Time.deltaTime);
             ArrowRotators[i].localEulerAngles = new Vector3(0, 180 + _arrowAngles[i], 0);
         }
 
         tryAgain:
         var curChildren = (Array) _childrenField.GetValue(_selectables[_curSelectable].Parent);
-        if (curChildren == null || !Enumerable.Range(0, curChildren.Length).Any(ix => ReferenceEquals(curChildren.GetValue(ix), _selectables[_curSelectable].Child)))
+        if (!_selectables[_curSelectable].Child.gameObject.activeInHierarchy
+                || curChildren == null
+                || !Enumerable.Range(0, curChildren.Length).Any(ix => ReferenceEquals(curChildren.GetValue(ix), _selectables[_curSelectable].Child)))
         {
-            RediscoverSelectables(_selectables[_curSelectable].Parent);
+            RediscoverSelectables(_selectables[_curSelectable].Parent, true);
             goto tryAgain;
         }
 
