@@ -85,8 +85,8 @@ public class GlitchedButtonScript : MonoBehaviour
         Debug.LogFormat("[The Glitched Button #{0}] Selected bit sequence “{1}” (#{2}).", _moduleId, Convert.ToString(seq, 2).PadLeft(bitLength, '0'), _seqIx + 1);
 
         _flippedBit = Rnd.Range(0, bitLength);
-        _cyclingBits = Convert.ToString(seq ^ (1 << _flippedBit), 2).PadLeft(bitLength, '0');
-        Debug.LogFormat("[The Glitched Button #{0}] Showing bit sequence “{1}” (flipped bit is #{2}).", _moduleId, _cyclingBits, 16 - _flippedBit);
+        _cyclingBits = Convert.ToString(seq ^ (1 << (15 - _flippedBit)), 2).PadLeft(bitLength, '0');
+        Debug.LogFormat("[The Glitched Button #{0}] Showing bit sequence “{1}” (flipped bit is #{2}).", _moduleId, _cyclingBits, _flippedBit + 1);
 
         Debug.LogFormat("[The Glitched Button #{0}] Solution: {1}. () = hold, [] = release.", _moduleId, _cyclingBits
             .Select((ch, ix) => ix == _flippedBit ? string.Format("({0})", ch) : ch.ToString())
