@@ -187,7 +187,6 @@ public class CornflowerButtonScript : MonoBehaviour
 
     private void RediscoverSelectables(Component parent, bool findNewSelectable)
     {
-        Debug.LogFormat("<> RediscoverSelectables({0})", parent.name);
         var has = _selectables.Count > 0;
         var oldPair = has ? _selectables[_curSelectable] : default(ParentChildPair);
         var oldDist = has ? childDist(_selectables[_curSelectable].Child) : 0;
@@ -231,7 +230,6 @@ public class CornflowerButtonScript : MonoBehaviour
             }
             setCurSelectable(newSelectable);
         }
-        Debug.LogFormat("<> RediscoverSelectables result:\n{0}", Enumerable.Range(0, _selectables.Count).Select(ix => string.Format("  {0} {1} {2}", ix == newSelectable ? "→" : " ", GetObjectPath(_selectables[ix].Child.transform), _selectables[ix].Child.gameObject.activeInHierarchy ? "✓" : "✗")).Join("\n"));
     }
 
     private void SortSelectables()
