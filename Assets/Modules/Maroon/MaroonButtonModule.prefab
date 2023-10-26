@@ -44,6 +44,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1123943612929056
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4636705888797596}
+  m_Layer: 0
+  m_Name: SolvedParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1125897854347298
 GameObject:
   m_ObjectHideFlags: 1
@@ -115,6 +130,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1529156875103610
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4885776836982006}
+  m_Layer: 0
+  m_Name: FlagsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1625075889098522
 GameObject:
   m_ObjectHideFlags: 1
@@ -161,6 +191,23 @@ GameObject:
   - component: {fileID: 114108535298636058}
   m_Layer: 0
   m_Name: StatusLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1749117241200842
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4330306271853896}
+  - component: {fileID: 33236126453302462}
+  - component: {fileID: 23960122474503538}
+  m_Layer: 0
+  m_Name: Flag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -217,6 +264,22 @@ GameObject:
   - component: {fileID: 114820383251653196}
   m_Layer: 0
   m_Name: MaroonButtonModule
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1974900500206420
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4636406435685918}
+  - component: {fileID: 108178943722720260}
+  m_Layer: 0
+  m_Name: Spotlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -281,6 +344,8 @@ Transform:
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4532317815840268}
+  - {fileID: 4885776836982006}
+  - {fileID: 4636705888797596}
   m_Father: {fileID: 4270060223130412}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -356,6 +421,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4330306271853896
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749117241200842}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_Children: []
+  m_Father: {fileID: 4636705888797596}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!4 &4517966659833974
 Transform:
   m_ObjectHideFlags: 1
@@ -395,6 +473,33 @@ Transform:
   m_Father: {fileID: 4263519378220178}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4636406435685918
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1974900500206420}
+  m_LocalRotation: {x: 0, y: 0.9396927, z: -0.3420201, w: 0}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0.1139}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4885776836982006}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 40, y: 180, z: 0}
+--- !u!4 &4636705888797596
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123943612929056}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4330306271853896}
+  m_Father: {fileID: 4158069017626096}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4663752110370430
 Transform:
   m_ObjectHideFlags: 1
@@ -421,6 +526,20 @@ Transform:
   m_Father: {fileID: 4270060223130412}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!4 &4885776836982006
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529156875103610}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4636406435685918}
+  m_Father: {fileID: 4158069017626096}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23064962815927692
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -435,7 +554,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 4dbb6f8f7728c1746a31299b5712ecbb, type: 2}
+  - {fileID: 2100000, guid: 6cc93b5ffe42de94c8e8ba4dc382c4e2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -625,6 +744,40 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!23 &23960122474503538
+MeshRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749117241200842}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_Materials:
+  - {fileID: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!23 &23986228910910892
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -680,6 +833,13 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1655227994740064}
   m_Mesh: {fileID: 4300004, guid: 8a29834619be7f5499bcd8e6890c1356, type: 3}
+--- !u!33 &33236126453302462
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749117241200842}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &33324630742726640
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -722,6 +882,42 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1625075889098522}
   m_Mesh: {fileID: 4300008, guid: 8a29834619be7f5499bcd8e6890c1356, type: 3}
+--- !u!108 &108178943722720260
+Light:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1974900500206420}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 5
+  m_Range: 0.15
+  m_SpotAngle: 50
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!114 &114108535298636058
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -806,8 +1002,8 @@ MonoBehaviour:
   m_Script: {fileID: -119419473, guid: 45b809be76fd7a3468b6f517bced6f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModuleType: BlueButtonModule
-  ModuleDisplayName: The Blue Button
+  ModuleType: MaroonButtonModule
+  ModuleDisplayName: The Maroon Button
   RequiresTimerVisibility: 0
 --- !u!114 &114462647377417402
 MonoBehaviour:
@@ -939,6 +1135,34 @@ MonoBehaviour:
   BombInfo: {fileID: 114851826596115828}
   MaroonButtonSelectable: {fileID: 114303559387390978}
   MaroonButtonCap: {fileID: 1064130632272964}
+  Mask: {fileID: 23093171808732508}
+  MaskShaderManager: {fileID: 114605853814931052}
+  FlagsParent: {fileID: 4885776836982006}
+  SolveParent: {fileID: 4636705888797596}
+  FlagTextures:
+  - {fileID: 2800000, guid: 1d6983ef7bff8b6429ca820b8ece9abd, type: 3}
+  - {fileID: 2800000, guid: e144a1181b1028d419677c55114f018f, type: 3}
+  - {fileID: 2800000, guid: 74b69cec1dcf1ae4e9f69a134a7cf0fd, type: 3}
+  - {fileID: 2800000, guid: 2e7d7e1bcd7affc46a95369f8c90a3e6, type: 3}
+  - {fileID: 2800000, guid: 7d1f77413c035e345be8b64be42c18cf, type: 3}
+  - {fileID: 2800000, guid: 4a1752f383b1b754781542ca09c2e838, type: 3}
+  - {fileID: 2800000, guid: 7fea2d57d7c3d6b4eb59b3b16171f577, type: 3}
+  - {fileID: 2800000, guid: d2082d966eb3ece438bdfc38914ad617, type: 3}
+  - {fileID: 2800000, guid: d4b2f02d2a96ef94892426eb82bb1d8c, type: 3}
+  - {fileID: 2800000, guid: 0c3eed93974fa6648bf4e5e1340347ef, type: 3}
+  - {fileID: 2800000, guid: 7bf1a4543ef2cb04b91283091c4f17b8, type: 3}
+  - {fileID: 2800000, guid: 2deb0ef6f6ca3de4cbbabd02f3d27d2d, type: 3}
+  - {fileID: 2800000, guid: 8ce85cea16561bc49bdad880e90965ec, type: 3}
+  - {fileID: 2800000, guid: 5c19cb011ef410e42b5aabd4fb94a47c, type: 3}
+  - {fileID: 2800000, guid: f524523068df6e547b668628713688c3, type: 3}
+  - {fileID: 2800000, guid: 720a2439aa62de842ab77685609f29a6, type: 3}
+  - {fileID: 2800000, guid: a6a96320548c6bf4e92cf8a893d4d219, type: 3}
+  - {fileID: 2800000, guid: d6359b0e7df144147bac8bb9c91a2eec, type: 3}
+  - {fileID: 2800000, guid: a9ce3bfd5b97010479062ce3c2d6f7d9, type: 3}
+  - {fileID: 2800000, guid: 75f7ba45a73f25c4499e322c654cd32d, type: 3}
+  Quad: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  Spotlight: {fileID: 108178943722720260}
+  SolveFlag: {fileID: 23960122474503538}
 --- !u!114 &114851826596115828
 MonoBehaviour:
   m_ObjectHideFlags: 1
