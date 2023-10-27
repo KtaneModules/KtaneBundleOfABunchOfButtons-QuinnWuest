@@ -278,7 +278,7 @@ public class MaroonButtonScript : MonoBehaviour
         Match m;
         if ((m = Regex.Match(command, @"^\s*(?:tap\s+)?(.*)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
-            string[] flags = m.Groups[1].Value.Split(';');
+            string[] flags = m.Groups[1].Value.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             List<int> pressIndexes = new List<int>();
 
