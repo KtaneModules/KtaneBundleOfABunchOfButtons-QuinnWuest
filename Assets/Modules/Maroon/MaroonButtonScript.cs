@@ -15,7 +15,7 @@ public class MaroonButtonScript : MonoBehaviour
     public KMSelectable MaroonButtonSelectable;
     public GameObject MaroonButtonCap;
     public MeshRenderer MaroonButtonScreen;
-    public Material flagSelectedScreenMaterial;
+    public Material FlagSelectedScreenMaterial;
     public Material MaroonButtonScreenMaterial;
 
     public MeshRenderer Mask;
@@ -27,6 +27,9 @@ public class MaroonButtonScript : MonoBehaviour
     public Mesh Quad;
     public Light Spotlight;
     public MeshRenderer SolveFlag;
+    public Mesh Checkmark;
+    public Color CheckmarkHighlightColor;
+    public Color CheckmarkColor;
 
     // Static info
     private static readonly Dictionary<string, int> flagSizes = new Dictionary<string, int> { { "Afghanistan", 667 }, { "Albania", 714 }, { "Algeria", 667 }, { "Andorra", 700 }, { "Angola", 667 }, { "Antigua and Barbuda", 667 }, { "Argentina", 643 }, { "Armenia", 500 }, { "Australia", 500 }, { "Austria", 667 }, { "Azerbaijan", 500 }, { "Bahamas", 500 }, { "Bangladesh", 600 }, { "Barbados", 667 }, { "Belarus", 500 }, { "Belgium", 667 }, { "Belize", 667 }, { "Benin", 667 }, { "Bhutan", 667 }, { "Bolivia", 682 }, { "Bosnia and Herzegovina", 500 }, { "Botswana", 667 }, { "Brazil", 700 }, { "Brunei", 500 }, { "Bulgaria", 600 }, { "Burkina Faso", 667 }, { "Burundi", 600 }, { "Cabo Verde", 588 }, { "Cambodia", 667 }, { "Cameroon", 667 }, { "Canada", 500 }, { "Central African Republic", 667 }, { "Chad", 667 }, { "Chile", 667 }, { "China", 667 }, { "Colombia", 667 }, { "Comoros", 600 }, { "Republic of the Congo", 667 }, { "Costa Rica", 600 }, { "Côte d’Ivoire", 667 }, { "Croatia", 500 }, { "Cuba", 500 }, { "Cyprus", 600 }, { "Czech Republic", 667 }, { "North Korea", 500 }, { "Democratic Republic of the Congo", 667 }, { "Denmark", 757 }, { "Djibouti", 667 }, { "Dominica", 500 }, { "Dominican Republic", 625 }, { "Ecuador", 500 }, { "Egypt", 667 }, { "El Salvador", 564 }, { "Equatorial Guinea", 667 }, { "Eritrea", 500 }, { "Estonia", 636 }, { "Eswatini", 667 }, { "Ethiopia", 500 }, { "Fiji", 500 }, { "Finland", 611 }, { "France", 667 }, { "Gabon", 750 }, { "The Gambia", 667 }, { "Georgia", 667 }, { "Germany", 600 }, { "Ghana", 667 }, { "Greece", 667 }, { "Grenada", 600 }, { "Guatemala", 625 }, { "Guinea", 667 }, { "Guinea-Bissau", 500 }, { "Guyana", 600 }, { "Haiti", 600 }, { "Honduras", 500 }, { "Hungary", 500 }, { "Iceland", 720 }, { "India", 667 }, { "Iran", 571 }, { "Iraq", 667 }, { "Ireland", 500 }, { "Israel", 727 }, { "Italy", 667 }, { "Jamaica", 500 }, { "Japan", 667 }, { "Jordan", 500 }, { "Kazakhstan", 500 }, { "Kenya", 667 }, { "Kiribati", 500 }, { "Kuwait", 500 }, { "Kyrgyzstan", 600 }, { "Laos", 667 }, { "Latvia", 500 }, { "Lebanon", 667 }, { "Lesotho", 667 }, { "Liberia", 526 }, { "Libya", 500 }, { "Liechtenstein", 600 }, { "Lithuania", 600 }, { "Luxembourg", 600 }, { "Madagascar", 667 }, { "Malawi", 667 }, { "Malaysia", 500 }, { "Maldives", 667 }, { "Mali", 667 }, { "Malta", 667 }, { "Marshall Islands", 526 }, { "Mauritania", 667 }, { "Mauritius", 667 }, { "Mexico", 571 }, { "Federated States of Micronesia", 526 }, { "Mongolia", 500 }, { "Montenegro", 500 }, { "Morocco", 667 }, { "Mozambique", 667 }, { "Myanmar", 556 }, { "Namibia", 667 }, { "Nauru", 500 }, { "Nepal", 1222 }, { "Netherlands", 667 }, { "New Zealand", 500 }, { "Nicaragua", 600 }, { "Niger", 857 }, { "Nigeria", 500 }, { "North Macedonia", 500 }, { "Norway", 727 }, { "Oman", 500 }, { "Pakistan", 667 }, { "Palau", 625 }, { "Panama", 667 }, { "Papua New Guinea", 750 }, { "Paraguay", 600 }, { "Peru", 667 }, { "Philippines", 500 }, { "Poland", 625 }, { "Portugal", 667 }, { "South Korea", 667 }, { "Moldova", 500 }, { "Romania", 667 }, { "Russia", 667 }, { "Rwanda", 667 }, { "Saint Kitts and Nevis", 667 }, { "Saint Lucia", 500 }, { "Saint Vincent and the Grenadines", 667 }, { "Samoa", 500 }, { "San Marino", 750 }, { "São Tomé and Príncipe", 500 }, { "Saudi Arabia", 667 }, { "Senegal", 667 }, { "Serbia", 667 }, { "Seychelles", 500 }, { "Sierra Leone", 667 }, { "Singapore", 667 }, { "Slovakia", 667 }, { "Slovenia", 500 }, { "Solomon Islands", 500 }, { "Somalia", 667 }, { "South Africa", 667 }, { "South Sudan", 500 }, { "Spain", 667 }, { "Sri Lanka", 500 }, { "Sudan", 500 }, { "Suriname", 667 }, { "Sweden", 625 }, { "Switzerland", 1000 }, { "Syria", 667 }, { "Tajikistan", 500 }, { "Thailand", 667 }, { "Timor-Leste", 500 }, { "Togo", 618 }, { "Tonga", 500 }, { "Trinidad and Tobago", 600 }, { "Tunisia", 667 }, { "Turkey", 667 }, { "Turkmenistan", 667 }, { "Tuvalu", 500 }, { "Uganda", 667 }, { "Ukraine", 667 }, { "United Arab Emirates", 500 }, { "United Kingdom", 500 }, { "Tanzania", 667 }, { "United States", 526 }, { "Uruguay", 667 }, { "Uzbekistan", 500 }, { "Vanuatu", 600 }, { "Venezuela", 667 }, { "Vietnam", 667 }, { "Yemen", 667 }, { "Zambia", 667 }, { "Zimbabwe", 500 } };
@@ -46,6 +49,7 @@ public class MaroonButtonScript : MonoBehaviour
     private int _moduleId;
     private MaskMaterials _maskMaterials;
     private bool _isSolved = false;
+    private GameObject[][] checkMarks;
 
     private void Start()
     {
@@ -103,27 +107,36 @@ public class MaroonButtonScript : MonoBehaviour
 
         var scroller = MakeGameObject("Flags scroller", FlagsParent);
         var width = 0f;
-        var numCopies = 0;
         const float separation = .125f;
         const float spotlightDistance = 1f / 208 * 190;
 
-        while (numCopies < 2)
+        checkMarks = Enumerable.Range(0, chosenFlags.Length).Select(_ => new GameObject[2]).ToArray();
+        for (var copy = 0; copy < 2; copy++)
         {
             for (int i = 0; i < chosenFlags.Length; i++)
             {
-                var blobObj = MakeGameObject(string.Format("Flag {0}", i), scroller.transform,
+                var flagObj = MakeGameObject(string.Format("Flag {0}", i), scroller.transform,
                     position: new Vector3(width, 0, 0),
                     rotation: Quaternion.Euler(90, 0, 0),
                     scale: new Vector3(.08f, flagSizes[FlagTextures[chosenFlags[i]].name] * 0.001f * 0.08f, 1));
-                blobObj.AddComponent<MeshFilter>().sharedMesh = Quad;
-                var mr = blobObj.AddComponent<MeshRenderer>();
+                flagObj.AddComponent<MeshFilter>().sharedMesh = Quad;
+                var mr = flagObj.AddComponent<MeshRenderer>();
                 mr.material = _maskMaterials.DiffuseTint;
                 mr.material.mainTexture = FlagTextures[chosenFlags[i]];
+
+                var checkmarkObj = MakeGameObject(string.Format("Checkmark {0}", i), scroller.transform,
+                    position: new Vector3(width, 0, 0),
+                    rotation: Quaternion.identity);
+                checkmarkObj.AddComponent<MeshFilter>().sharedMesh = Checkmark;
+                checkmarkObj.SetActive(false);
+                mr = checkmarkObj.AddComponent<MeshRenderer>();
+                mr.material = _maskMaterials.DiffuseTint;
+                checkMarks[i][copy] = checkmarkObj;
+
                 width += separation;
             }
-            numCopies++;
         }
-        width /= numCopies;
+        width /= 2;
 
         float scrollFactor = leftToRight ? -.1f : .1f;
         float? solveTime = null;
@@ -199,9 +212,10 @@ public class MaroonButtonScript : MonoBehaviour
         }
         else
         {
-            StartCoroutine(CorrectFlagSelectAnimation());
+            StartCoroutine(ShowCheckmark(submitOrder[submitIndex]));
 
             submitIndex++;
+
             if (submitIndex == submitOrder.Length)
             {
                 Debug.LogFormat(@"[The Maroon Button #{0}] Module solved!", _moduleId);
@@ -211,10 +225,19 @@ public class MaroonButtonScript : MonoBehaviour
         }
     }
 
-    private IEnumerator CorrectFlagSelectAnimation()
+    private IEnumerator ShowCheckmark(int i)
     {
-        MaroonButtonScreen.material = flagSelectedScreenMaterial;
-        yield return new WaitForSeconds(.5f);
+        MaroonButtonScreen.material = FlagSelectedScreenMaterial;
+        yield return Animation(.3f, t =>
+        {
+            var nt = Easing.BackOut(t, 0, 1, 1);
+            foreach (var checkmarkObj in checkMarks[i])
+            {
+                checkmarkObj.transform.localScale = new Vector3(nt, 1, nt);
+                checkmarkObj.GetComponent<MeshRenderer>().material.color = Color.Lerp(CheckmarkHighlightColor, CheckmarkColor, t);
+                checkmarkObj.SetActive(t > 0);
+            }
+        });
         MaroonButtonScreen.material = MaroonButtonScreenMaterial;
     }
 

@@ -1168,6 +1168,9 @@ MonoBehaviour:
   Quad: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   Spotlight: {fileID: 108178943722720260}
   SolveFlag: {fileID: 23960122474503538}
+  Checkmark: {fileID: 4300000, guid: 56b999e45c3cb2547a958b874ebb6c26, type: 3}
+  CheckmarkHighlightColor: {r: 0.9862069, g: 1, b: 0, a: 0}
+  CheckmarkColor: {r: 0.078431375, g: 0.5058824, b: 0.13725491, a: 1}
 --- !u!114 &114851826596115828
 MonoBehaviour:
   m_ObjectHideFlags: 1
