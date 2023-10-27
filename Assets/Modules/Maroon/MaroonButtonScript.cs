@@ -14,6 +14,9 @@ public class MaroonButtonScript : MonoBehaviour
     public KMBombInfo BombInfo;
     public KMSelectable MaroonButtonSelectable;
     public GameObject MaroonButtonCap;
+    public MeshRenderer MaroonButtonScreen;
+    public Material flagSelectedScreenMaterial;
+    public Material MaroonButtonScreenMaterial;
 
     public MeshRenderer Mask;
     public MaskShaderManager MaskShaderManager;
@@ -67,7 +70,7 @@ public class MaroonButtonScript : MonoBehaviour
         string decoyStatesString = decoyFlags.Select(i => string.Format("{0} ({1})", FlagTextures[i].name, flagLatitudes[i])).Join(", ");
         string submitOrderString = submitOrder.Select(i => FlagTextures[chosenFlags[i]].name).Join(", ");
 
-        Debug.LogFormat(@"[The Maroon Button #{0}] The unique flag is {1} in the continent of {2}.", _moduleId, FlagTextures[solveFlag].name, randomContinent, flagLatitudes[solveFlag]);
+        Debug.LogFormat(@"[The Maroon Button #{0}] The unique flag is {1} in the continent of {2}, which should be pressed {3}.", _moduleId, FlagTextures[solveFlag].name, randomContinent, isEven ? "first" : "last");
         Debug.LogFormat(@"[The Maroon Button #{0}] The decoy flags are {1} in the continent of {2}.", _moduleId, decoyStatesString, chosenDecoyContinent);
         Debug.LogFormat(@"[The Maroon Button #{0}] The correct order is: {1}.", _moduleId, submitOrderString);
 
@@ -196,6 +199,8 @@ public class MaroonButtonScript : MonoBehaviour
         }
         else
         {
+            StartCoroutine(CorrectFlagSelectAnimation());
+
             submitIndex++;
             if (submitIndex == submitOrder.Length)
             {
@@ -204,6 +209,13 @@ public class MaroonButtonScript : MonoBehaviour
                 Module.HandlePass();
             }
         }
+    }
+
+    private IEnumerator CorrectFlagSelectAnimation()
+    {
+        MaroonButtonScreen.material = flagSelectedScreenMaterial;
+        yield return new WaitForSeconds(.5f);
+        MaroonButtonScreen.material = MaroonButtonScreenMaterial;
     }
 
     private GameObject MakeGameObject(string name, Transform parent, float scale, Vector3? position = null, Quaternion? rotation = null)
@@ -252,6 +264,16 @@ public class MaroonButtonScript : MonoBehaviour
 
     public IEnumerator TwitchHandleForcedSolve()
     {
-        yield return null;
+        while (!_isSolved)
+        {
+            yield return true;
+            if (flagHighlight == submitOrder[submitIndex])
+            {
+                MaroonButtonSelectable.OnInteract();
+                yield return new WaitForSeconds(.1f);
+                MaroonButtonSelectable.OnInteractEnded();
+                yield return new WaitForSeconds(.1f);
+            }
+        }
     }
 }

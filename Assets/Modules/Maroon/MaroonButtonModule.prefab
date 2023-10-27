@@ -58,7 +58,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1125897854347298
 GameObject:
   m_ObjectHideFlags: 1
@@ -1135,6 +1135,11 @@ MonoBehaviour:
   BombInfo: {fileID: 114851826596115828}
   MaroonButtonSelectable: {fileID: 114303559387390978}
   MaroonButtonCap: {fileID: 1064130632272964}
+  MaroonButtonScreen: {fileID: 23064962815927692}
+  flagSelectedScreenMaterial: {fileID: 2100000, guid: 175f1c9c98a142142926d38a7219136c,
+    type: 2}
+  MaroonButtonScreenMaterial: {fileID: 2100000, guid: 6cc93b5ffe42de94c8e8ba4dc382c4e2,
+    type: 2}
   Mask: {fileID: 23093171808732508}
   MaskShaderManager: {fileID: 114605853814931052}
   FlagsParent: {fileID: 4885776836982006}
