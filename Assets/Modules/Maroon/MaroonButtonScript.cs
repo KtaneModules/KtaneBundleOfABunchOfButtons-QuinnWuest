@@ -270,19 +270,41 @@ public class MaroonButtonScript : MonoBehaviour
     }
 
 #pragma warning disable 0414
-    private readonly string TwitchHelpMessage = "";
+    private readonly string TwitchHelpMessage = "!{0} tap <flags> [taps the button on specific flags. Chain with semicolons and write the full names of the countries.]";
 #pragma warning restore 0414
 
     private IEnumerator ProcessTwitchCommand(string command)
     {
-        if (Regex.IsMatch(command, @"^\s*tap\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
+        Match m;
+        if ((m = Regex.Match(command, @"^\s*(?:tap\s+)?(.*)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
+            string[] flags = m.Groups[1].Value.Split(';');
+
+            List<int> pressIndexes = new List<int>();
+
+            for (int i = 0; i < flags.Length; i++)
+            {
+                string flagName = flags[i].Trim();
+                var countryIndex = flagNames.IndexOf(name => name.EqualsIgnoreCase(flagName));
+                if (countryIndex == -1)
+                    yield return string.Format("sendtochaterror!h “{0}” is not a valid country.", flagName);
+
+                var flagIndex = Array.IndexOf(chosenFlags, countryIndex);
+                if (flagIndex == -1)
+                    yield return string.Format("sendtochaterror!h “{0}” is not on the module.", flagNames[countryIndex]);
+
+                pressIndexes.Add(flagIndex);
+            }
+
             yield return null;
-            MaroonButtonSelectable.OnInteract();
-            yield return new WaitForSeconds(.75f);
-            MaroonButtonSelectable.OnInteractEnded();
-            yield return new WaitForSeconds(.1f);
-            yield break;
+
+            foreach (int pressIndex in pressIndexes)
+            {
+                while (flagHighlight != pressIndex)
+                    yield return "trycancel";
+
+                yield return new[] { MaroonButtonSelectable };
+            }
         }
     }
 
