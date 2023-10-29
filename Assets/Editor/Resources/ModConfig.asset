@@ -15,24 +15,38 @@ MonoBehaviour:
   title: Bundle of a Bunch of Buttons
   author: Quinn Wuest, Timwi, Cooldoom5, GhostSalt
   description: "This is a module bundle. It has a bunch of buttons.\r\n\r\nMade by
-    Quinn Wuest, Timwi, Cooldoom5, & GhostSalt\r\n\r\nThe Amber Button - [url=https://ktane.timwi.de/HTML/The%20Amber%20Button.html]manual[/url]\r\nThe
-    Azure Button - [url=https://ktane.timwi.de/HTML/The%20Azure%20Button.html]manual[/url]\r\nThe
-    Black Button - [url=https://ktane.timwi.de/HTML/The%20Black%20Button.html]manual[/url]\r\nThe
-    Blue Button - [url=https://ktane.timwi.de/HTML/The%20Blue%20Button.html]manual[/url]\r\nThe
-    Cornflower Button - [url=https://ktane.timwi.de/HTML/The%20Cornflower%20Button.html]manual[/url]\r\nThe
-    Cyan Button - [url=https://ktane.timwi.de/HTML/The%20Cyan%20Button.html]manual[/url]\r\nThe
-    Glitched Button - [url=https://ktane.timwi.de/HTML/The%20Glitched%20Button.html]manual[/url]\r\nThe
-    Gray Button - [url=https://ktane.timwi.de/HTML/The%20Gray%20Button.html]manual[/url]\r\nThe
-    Green Button - [url=https://ktane.timwi.de/HTML/The%20Green%20Button.html]manual[/url]\r\nThe
-    Navy Button - [url=https://ktane.timwi.de/HTML/The%20Navy%20Button.html]manual[/url]\r\nThe
-    Orange Button - [url=https://ktane.timwi.de/HTML/The%20Orange%20Button.html]manual[/url]\r\nThe
-    Pink Button - [url=https://ktane.timwi.de/HTML/The%20Pink%20Button.html]manual[/url]\r\nThe
-    Purple Button - [url=https://ktane.timwi.de/HTML/The%20Purple%20Button.html]manual[/url]\r\nThe
-    Red Button - [url=https://ktane.timwi.de/HTML/The%20Red%20Button.html]manual[/url]\r\nThe
-    Sapphire Button - [url=https://ktane.timwi.de/HTML/The%20Sapphire%20Button.html]manual[/url]\r\nThe
-    Teal Button - [url=https://ktane.timwi.de/HTML/The%20Teal%20Button.html]manual[/url]\r\nThe
-    White Button - [url=https://ktane.timwi.de/HTML/The%20White%20Button.html]manual[/url]\r\nThe
-    Yellow Button - [url=https://ktane.timwi.de/HTML/The%20Yellow%20Button.html]manual[/url]"
+    Quinn Wuest, Timwi, Cooldoom5, GhostSalt, & Cirax856\r\n\r\nThe Amber Button\n[url=https://ktane.timwi.de/HTML/The%20Amber%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Amber%20Button.pdf]PDF[/url]\r\nThe Azure
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Azure%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Azure%20Button.pdf]PDF[/url]\r\nThe Black
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Black%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Black%20Button.pdf]PDF[/url]\r\nThe Blue
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Blue%20Button.html]HTML[/url] [url=https://ktane.timwi.de/PDF/The%20Blue%20Button.pdf]PDF[/url]\r\nThe
+    Cornflower Button\n[url=https://ktane.timwi.de/HTML/The%20Cornflower%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Cornflower%20Button.pdf]PDF[/url]\r\nThe
+    Cyan Button\n[url=https://ktane.timwi.de/HTML/The%20Cyan%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Cyan%20Button.pdf]PDF[/url]\r\nThe Glitched
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Glitched%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Glitched%20Button.pdf]PDF[/url]\r\nThe Gray
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Gray%20Button.html]HTML[/url] [url=https://ktane.timwi.de/PDF/The%20Gray%20Button.pdf]PDF[/url]\r\nThe
+    Green Button\n[url=https://ktane.timwi.de/HTML/The%20Green%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Green%20Button.pdf]PDF[/url]\r\nThe Maroon
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Maroon%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Maroon%20Button.pdf]PDF[/url]\r\nThe Navy
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Navy%20Button.html]HTML[/url] [url=https://ktane.timwi.de/PDF/The%20Navy%20Button.pdf]PDF[/url]\r\nThe
+    Orange Button\n[url=https://ktane.timwi.de/HTML/The%20Orange%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Orange%20Button.pdf]PDF[/url]\r\nThe Pink
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Pink%20Button.html]HTML[/url] [url=https://ktane.timwi.de/PDF/The%20Pink%20Button.pdf]PDF[/url]\r\nThe
+    Purple Button\n[url=https://ktane.timwi.de/HTML/The%20Purple%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Purple%20Button.pdf]PDF[/url]\r\nThe Red
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Red%20Button.html]HTML[/url] [url=https://ktane.timwi.de/PDF/The%20Red%20Button.pdf]PDF[/url]\r\nThe
+    Sapphire Button\n[url=https://ktane.timwi.de/HTML/The%20Sapphire%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Sapphire%20Button.pdf]PDF[/url]\r\nThe Teal
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Teal%20Button.html]HTML[/url] [url=https://ktane.timwi.de/PDF/The%20Teal%20Button.pdf]PDF[/url]\r\nThe
+    White Button\n[url=https://ktane.timwi.de/HTML/The%20White%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20White%20Button.pdf]PDF[/url]\r\nThe Yellow
+    Button\n[url=https://ktane.timwi.de/HTML/The%20Yellow%20Button.html]HTML[/url]
+    [url=https://ktane.timwi.de/PDF/The%20Yellow%20Button.pdf]PDF[/url]"
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: 6f25a045044158a4793cf308521dad2f, type: 3}
