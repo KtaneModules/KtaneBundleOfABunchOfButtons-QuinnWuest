@@ -28,6 +28,7 @@ public class CyanButtonScript : MonoBehaviour
     private Coroutine _timer;
     private int _timerTime = 20;
     private bool _autoSolving;
+    private bool _isAnimating;
 
     private static readonly float[] xPos = { -0.05f, 0f, 0.05f, -0.05f, 0f, 0.05f };
     private static readonly float[] zPos = { 0f, 0f, 0f, -0.05f, -0.05f, -0.05f };
@@ -133,7 +134,9 @@ public class CyanButtonScript : MonoBehaviour
         _buttonVisible = false;
         StartCoroutine(OpenDoors(sinkInto, false));
         StartCoroutine(MoveButton(sinkInto, false));
-        yield return new WaitForSeconds(1f);
+        while (_isAnimating)
+            yield return null;
+        yield return new WaitForSeconds(0.2f);
         if (comeOutOf != null)
         {
             StartCoroutine(OpenDoors(comeOutOf.Value, true));
@@ -162,6 +165,7 @@ public class CyanButtonScript : MonoBehaviour
 
     private IEnumerator OpenDoors(int b, bool isEjecting)
     {
+        _isAnimating = true;
         var duration = 0.2f;
         var elapsed = 0f;
         Audio.PlaySoundAtTransform("DoorOpen", transform);
@@ -191,6 +195,7 @@ public class CyanButtonScript : MonoBehaviour
         Audio.PlaySoundAtTransform("DoorClose", transform);
         if (!isEjecting)
             CyanButtonObj.SetActive(false);
+        _isAnimating = false;
     }
 
     private IEnumerator MoveButton(int b, bool isEjecting)

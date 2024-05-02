@@ -214,7 +214,7 @@ public class RedButtonScript : MonoBehaviour
         if (_moduleSolved)
             yield break;
 
-        string[] split = command.ToLowerInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+        string[] split = command.Trim().ToLowerInvariant().Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
         if (split.Length == 1 && split[0] == "tap")
         {
