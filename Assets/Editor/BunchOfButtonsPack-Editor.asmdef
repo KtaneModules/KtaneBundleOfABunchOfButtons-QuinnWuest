@@ -1,0 +1,10 @@
+{
+  "name": "BunchOfButtonsPack-Editor",
+  "references": [
+    "BunchOfButtonsPack"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": []
+}
