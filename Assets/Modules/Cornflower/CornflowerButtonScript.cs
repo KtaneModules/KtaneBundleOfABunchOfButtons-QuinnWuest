@@ -37,7 +37,7 @@ public class CornflowerButtonScript : MonoBehaviour
     private int _curSelectable;
 
     private readonly int[] _arrowPositions = { 0, 0, 0 };
-    private readonly float[] _arrowAngles = { 0, 0, 0 };
+    private readonly Quaternion[] _arrowAngles = new Quaternion[3];
     private float _mainArrowAngle;
     private int _selectedArrows;
     private Component _lastHighlighted;
@@ -318,8 +318,8 @@ public class CornflowerButtonScript : MonoBehaviour
 
         for (var i = 0; i < 3; i++)
         {
-            _arrowAngles[i] = Mathf.Lerp(_arrowAngles[i], _arrowPositions[i] * 72, 4 * Time.deltaTime);
-            ArrowRotators[i].localEulerAngles = new Vector3(0, 180 + _arrowAngles[i], 0);
+            _arrowAngles[i] = Quaternion.Slerp(_arrowAngles[i], Quaternion.Euler(0, 180 + _arrowPositions[i] * 72, 0), 4 * Time.deltaTime);
+            ArrowRotators[i].localRotation = _arrowAngles[i];
         }
 
         tryAgain:
