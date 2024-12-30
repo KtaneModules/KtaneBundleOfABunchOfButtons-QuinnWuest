@@ -1,6 +1,7 @@
-Shader "GUI/KT 3D Text" {
+﻿Shader "KT/Custom/KT 3D Text Mask" {
 	Properties {
 		_MainTex ("Font Texture", 2D) = "white" {}
+		_Layer ("Layer", Range (1,255)) = 1
 	}
 
 	SubShader {
@@ -13,6 +14,11 @@ Shader "GUI/KT 3D Text" {
 		}
 		Lighting Off Cull Back ZTest LEqual ZWrite Off Fog { Mode Off }
 		Blend SrcAlpha OneMinusSrcAlpha
+
+		Stencil {
+			ref [_Layer]
+			Comp Equal
+		}
 
 		Pass {
 			CGPROGRAM

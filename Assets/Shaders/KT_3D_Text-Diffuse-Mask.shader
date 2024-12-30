@@ -1,6 +1,7 @@
-Shader "GUI/KT 3D Text Diffuse" {
+Shader "KT/Custom/KT 3D Text Mask Diffuse" {
     Properties {
         _MainTex("Base (RGB)", 2D) = "white" {}
+        _Layer ("Layer", Range (1,255)) = 1
     }
 
     SubShader {
@@ -14,6 +15,11 @@ Shader "GUI/KT 3D Text Diffuse" {
         LOD 150
         Cull Back
         Blend SrcAlpha OneMinusSrcAlpha
+
+        Stencil {
+            ref [_Layer]
+            Comp Equal
+        }
 
         CGPROGRAM
         #pragma surface surf Lambert vertex:vert alpha
