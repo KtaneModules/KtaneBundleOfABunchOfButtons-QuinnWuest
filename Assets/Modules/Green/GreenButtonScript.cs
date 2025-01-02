@@ -10,8 +10,8 @@ public class GreenButtonScript : MonoBehaviour
 {
     public KMBombModule Module;
     public KMAudio Audio;
-    public KMSelectable GreenButtonSelectable;
-    public GameObject GreenButtonCap;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
     public TextMesh _screenTextLeft, _screenTextRight;
 
     private static int _moduleIdCounter = 1;
@@ -82,8 +82,8 @@ public class GreenButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        GreenButtonSelectable.OnInteract += GreenButtonPress;
-        GreenButtonSelectable.OnInteractEnded += GreenButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
 
         _targetWord = _displayedString = _words.PickRandom();
         while (_displayedString.Length < 7)
@@ -94,7 +94,7 @@ public class GreenButtonScript : MonoBehaviour
     }
 
 
-    private bool GreenButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -165,7 +165,7 @@ public class GreenButtonScript : MonoBehaviour
         }
     }
 
-    private void GreenButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -177,11 +177,11 @@ public class GreenButtonScript : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            GreenButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        GreenButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
 #pragma warning disable 0414
@@ -201,8 +201,8 @@ public class GreenButtonScript : MonoBehaviour
 
         if (Regex.IsMatch(command, @"^\s*(?:press|tap|push|submit|play)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
-            GreenButtonSelectable.OnInteract();
-            GreenButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteractEnded();
             yield return null;
             yield break;
         }
@@ -223,18 +223,18 @@ public class GreenButtonScript : MonoBehaviour
             yield return "strike";
             yield return "solve";
 
-            GreenButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            GreenButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
 
             foreach (int answer in answers)
             {
                 while (_currentSet != answer)
                     yield return null;
-                GreenButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 yield return new WaitForSeconds(.1f);
-                GreenButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 yield return new WaitForSeconds(.1f);
             }
         }
@@ -244,8 +244,8 @@ public class GreenButtonScript : MonoBehaviour
     {
         while (_playing)
             yield return true;
-        GreenButtonSelectable.OnInteract();
-        GreenButtonSelectable.OnInteractEnded();
+        ButtonSelectable.OnInteract();
+        ButtonSelectable.OnInteractEnded();
         while (_targetWord.Length > 0)
         {
             if (_currentChar >= _displayedString.Length)
@@ -255,9 +255,9 @@ public class GreenButtonScript : MonoBehaviour
             }
             if (_targetWord[0] == _displayedString[_currentChar])
             {
-                GreenButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 yield return new WaitForSeconds(.1f);
-                GreenButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 _targetWord = _targetWord.Substring(1);
                 int ch = _currentChar;
                 yield return new WaitWhile(() => _currentChar == ch);

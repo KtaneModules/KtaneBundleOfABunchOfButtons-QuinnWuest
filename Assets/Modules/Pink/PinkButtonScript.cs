@@ -10,9 +10,9 @@ public class PinkButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMBombInfo BombInfo;
     public KMAudio Audio;
-    public KMSelectable PinkButtonSelectable;
-    public GameObject PinkButtonCap;
-    public TextMesh PinkButtonText;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
+    public TextMesh ButtonText;
     public Renderer ModuleBG;
 
     private static int _moduleIdCounter = 1;
@@ -65,8 +65,8 @@ public class PinkButtonScript : MonoBehaviour
         Debug.LogFormat("[The Pink Button #{0}] Binary after modification: {1}.", _moduleId, modifiedBinary);
         Debug.LogFormat("[The Pink Button #{0}] Input sequence: {1}.", _moduleId, _solution);
 
-        PinkButtonSelectable.OnInteract += PinkButtonPress;
-        PinkButtonSelectable.OnInteractEnded += PinkButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
         StartCoroutine(TextFlash());
     }
 
@@ -94,7 +94,7 @@ public class PinkButtonScript : MonoBehaviour
         }
     }
 
-    private bool PinkButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -103,7 +103,7 @@ public class PinkButtonScript : MonoBehaviour
         return false;
     }
 
-    private void PinkButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -119,11 +119,11 @@ public class PinkButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            PinkButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        PinkButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
     private IEnumerator TextFlash()
@@ -135,14 +135,14 @@ public class PinkButtonScript : MonoBehaviour
                 yield return new WaitForSeconds(.5f);
                 if (_moduleSolved)
                     goto solved;
-                PinkButtonText.text = _abbreviatedColorNames[_words[i]];
+                ButtonText.text = _abbreviatedColorNames[_words[i]];
                 StartCoroutine(ColorFade(_colors[i]));
             }
 
             yield return new WaitForSeconds(.5f);
             if (_moduleSolved)
                 goto solved;
-            PinkButtonText.text = "GO";
+            ButtonText.text = "GO";
             StartCoroutine(ColorFade(7));   // white
 
             if (_solutionProgress > 0)
@@ -154,7 +154,7 @@ public class PinkButtonScript : MonoBehaviour
         var colors = new[] { 6, 5, 7, 5, 6 };
         for (int i = 0; i < solveText.Length; i++)
         {
-            PinkButtonText.text = solveText[i];
+            ButtonText.text = solveText[i];
             StartCoroutine(ColorFade(colors[i]));
             yield return new WaitForSeconds(.5f);
         }
@@ -166,14 +166,14 @@ public class PinkButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            PinkButtonText.color = new Color(
+            ButtonText.color = new Color(
                 ((color & 1) != 0 ? 1f : 0) * (1 - elapsed / duration),
                 ((color & 2) != 0 ? 1f : 0) * (1 - elapsed / duration),
                 ((color & 4) != 0 ? 1f : 0) * (1 - elapsed / duration));
             yield return null;
             elapsed += Time.deltaTime;
         }
-        PinkButtonText.text = "";
+        ButtonText.text = "";
     }
 
 #pragma warning disable 414
@@ -205,7 +205,7 @@ public class PinkButtonScript : MonoBehaviour
         }
         yield return null;
 
-        while (PinkButtonText.text != "GO")
+        while (ButtonText.text != "GO")
             yield return null;
 
         var held = false;
@@ -226,12 +226,12 @@ public class PinkButtonScript : MonoBehaviour
             {
                 case 'H':
                     held = true;
-                    PinkButtonSelectable.OnInteract();
+                    ButtonSelectable.OnInteract();
                     yield return new WaitForSeconds(.1f);
                     break;
                 case 'R':
                     held = false;
-                    PinkButtonSelectable.OnInteractEnded();
+                    ButtonSelectable.OnInteractEnded();
                     yield return new WaitForSeconds(.1f);
                     break;
                 case 'T':
@@ -245,14 +245,14 @@ public class PinkButtonScript : MonoBehaviour
                 break;
         }
         if (held)
-            PinkButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
 
         yield return "end multiple strikes";
     }
 
     public IEnumerator TwitchHandleForcedSolve()
     {
-        while (PinkButtonText.text != "GO")
+        while (ButtonText.text != "GO")
             yield return null;
         yield return new WaitForSeconds(0.1f);
         var lastHeld = false;
@@ -260,12 +260,12 @@ public class PinkButtonScript : MonoBehaviour
         {
             switch (_solution[_solutionProgress])
             {
-                case 'H': lastHeld = true; PinkButtonSelectable.OnInteract(); yield return new WaitForSeconds(.1f); break;
-                case 'R': lastHeld = false; PinkButtonSelectable.OnInteractEnded(); yield return new WaitForSeconds(.1f); break;
+                case 'H': lastHeld = true; ButtonSelectable.OnInteract(); yield return new WaitForSeconds(.1f); break;
+                case 'R': lastHeld = false; ButtonSelectable.OnInteractEnded(); yield return new WaitForSeconds(.1f); break;
             }
             yield return null;
         }
         if (lastHeld)
-            PinkButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
     }
 }

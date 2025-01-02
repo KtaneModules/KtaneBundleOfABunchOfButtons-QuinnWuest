@@ -13,8 +13,8 @@ public class WhiteButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMBombInfo BombInfo;
     public KMAudio Audio;
-    public KMSelectable WhiteButtonSelectable;
-    public GameObject WhiteButtonCap;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
     public TextMesh[] ColorTexts;
     public TextMesh[] ValueTexts;
     public GameObject[] BlobObjs;
@@ -40,8 +40,8 @@ public class WhiteButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        WhiteButtonSelectable.OnInteract += WhiteButtonPress;
-        WhiteButtonSelectable.OnInteractEnded += WhiteButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
         _colorBlobs = Enumerable.Range(0, 26).ToArray().Shuffle().Take(2).ToArray();
 
         for (int i = 0; i < 2; i++)
@@ -64,7 +64,7 @@ public class WhiteButtonScript : MonoBehaviour
         Debug.LogFormat("[The White Button #{0}] The two colors are {1} and {2}. The solution is {3}.", _moduleId, COLORNAMES[_colorBlobs[0]], COLORNAMES[_colorBlobs[1]], _solution.Select(i => i == 0 ? "-" : i == 1 ? "0" : "+").Join(""));
     }
 
-    private bool WhiteButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -75,7 +75,7 @@ public class WhiteButtonScript : MonoBehaviour
         return false;
     }
 
-    private void WhiteButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -119,11 +119,11 @@ public class WhiteButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            WhiteButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        WhiteButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
     private IEnumerator TimerTickCheck()
@@ -203,11 +203,11 @@ public class WhiteButtonScript : MonoBehaviour
         yield return null;
         for (int i = 0; i < list.Count; i++)
         {
-            WhiteButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             int time = (int)BombInfo.GetTime();
             while (Math.Abs(time - (int)BombInfo.GetTime()) != list[i])
                 yield return null;
-            WhiteButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             if (_ignored)
             {
                 yield return "sendtochat The button was held over zero timer ticks for the intial value. Stopping command.";
@@ -222,11 +222,11 @@ public class WhiteButtonScript : MonoBehaviour
         int time = (int)BombInfo.GetTime();
         if (_initialHold == 3)
         {
-            WhiteButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             time = (int)BombInfo.GetTime();
             while (time - _maxHoldCount != (int)BombInfo.GetTime())
                 yield return null;
-            WhiteButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             goto next;
         }
         if (_initialHold != null)
@@ -236,39 +236,39 @@ public class WhiteButtonScript : MonoBehaviour
             {
                 if (_input[index] != _solution[index])
                 {
-                    WhiteButtonSelectable.OnInteract();
+                    ButtonSelectable.OnInteract();
                     time = (int)BombInfo.GetTime();
                     while (time - _maxHoldCount != (int)BombInfo.GetTime() || time + _maxHoldCount != (int)BombInfo.GetTime())
                         yield return null;
-                    WhiteButtonSelectable.OnInteractEnded();
+                    ButtonSelectable.OnInteractEnded();
                     goto next;
                 }
             }
         }
         next:
-        WhiteButtonSelectable.OnInteract();
+        ButtonSelectable.OnInteract();
         time = (int)BombInfo.GetTime();
         while (time - 1 != (int)BombInfo.GetTime() && time + 1 != (int)BombInfo.GetTime())
         {
             yield return null;
         }
-        WhiteButtonSelectable.OnInteractEnded();
+        ButtonSelectable.OnInteractEnded();
         while (_input.Count < 3)
         {
-            WhiteButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             if (_solution[_input.Count] == 0)
-                WhiteButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
             else if (_solution[_input.Count] == 1)
             {
                 while (_holdCount != _initialHold)
                     yield return null;
-                WhiteButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
             }
             else
             {
                 while (_holdCount <= _initialHold)
                     yield return null;
-                WhiteButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
             }
             yield return null;
         }

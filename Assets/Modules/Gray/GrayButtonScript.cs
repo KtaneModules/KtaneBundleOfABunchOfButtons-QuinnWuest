@@ -15,10 +15,10 @@ public class GrayButtonScript : MonoBehaviour
     public KMBombInfo BombInfo;
     public KMAudio Audio;
     public KMRuleSeedable RuleSeedable;
-    public KMSelectable GrayButtonSelectable;
-    public GameObject GrayButtonCap;
-    public MeshRenderer GrayButtonSymbol;
-    public TextMesh GrayButtonText;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
+    public MeshRenderer ButtonSymbol;
+    public TextMesh ScreenText;
     public Material[] Symbols;
     public Material LedUnlit;
     public Material LedLit;
@@ -69,10 +69,10 @@ public class GrayButtonScript : MonoBehaviour
 
         Debug.LogFormat(@"[The Gray Button #{0}] Example hold durations to solve: {1} ({2}).", _moduleId, ex.Select(f => f + "s").Join(", "), _solution.Join(", "));
 
-        GrayButtonSymbol.sharedMaterial = Symbols[symbol];
-        GrayButtonText.text = string.Format("{0}, {1}", results.Cell % 10, results.Cell / 10);
-        GrayButtonSelectable.OnInteract += GrayButtonPress;
-        GrayButtonSelectable.OnInteractEnded += GrayButtonRelease;
+        ButtonSymbol.sharedMaterial = Symbols[symbol];
+        ScreenText.text = string.Format("{0}, {1}", results.Cell % 10, results.Cell / 10);
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
     }
 
     private void SetLeds()
@@ -86,7 +86,7 @@ public class GrayButtonScript : MonoBehaviour
         return ch >= '0' && ch <= '9' ? ch - '0' : ch - 'A' + 10;
     }
 
-    private bool GrayButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -94,7 +94,7 @@ public class GrayButtonScript : MonoBehaviour
         return false;
     }
 
-    private void GrayButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -125,8 +125,8 @@ public class GrayButtonScript : MonoBehaviour
                 Debug.LogFormat(@"[The Gray Button #{0}] You held the button for {1}. Module solved.", _moduleId, holdTimes);
                 Module.HandlePass();
                 _moduleSolved = true;
-                GrayButtonText.fontSize = 70;
-                GrayButtonText.text = "SOLVED";
+                ScreenText.fontSize = 70;
+                ScreenText.text = "SOLVED";
             }
             _input.Clear();
             SetLeds();
@@ -161,11 +161,11 @@ public class GrayButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            GrayButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        GrayButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
 #pragma warning disable 414
@@ -189,9 +189,9 @@ public class GrayButtonScript : MonoBehaviour
         _tpInput = numbers.Select(f => float.Parse(f) * .1f).ToList();
         for (var i = 0; i < 4; i++)
         {
-            GrayButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(_tpInput[i]);
-            GrayButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
         }
     }
@@ -206,9 +206,9 @@ public class GrayButtonScript : MonoBehaviour
         _tpInput = _solutionSec.ToList();
         for (var i = 0; i < 4; i++)
         {
-            GrayButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(_tpInput[i] * .1f);
-            GrayButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
         }
     }

@@ -13,8 +13,8 @@ public class GlitchedButtonScript : MonoBehaviour
     public KMAudio Audio;
     public KMRuleSeedable RuleSeedable;
     public KMBombInfo Bomb;
-    public KMSelectable GlitchedButtonSelectable;
-    public GameObject GlitchedButtonCap;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
     public TextMesh Text;
     public MeshRenderer TextRenderer;
     public MaskShaderManager MaskShaderManager;
@@ -34,8 +34,8 @@ public class GlitchedButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        GlitchedButtonSelectable.OnInteract += GlitchedButtonPress;
-        GlitchedButtonSelectable.OnInteractEnded += GlitchedButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
 
         var fontTexture = TextRenderer.sharedMaterial.mainTexture;
         var mr = MaskShaderManager.MakeMaterials();
@@ -157,7 +157,7 @@ public class GlitchedButtonScript : MonoBehaviour
         return bits;
     }
 
-    private bool GlitchedButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -166,7 +166,7 @@ public class GlitchedButtonScript : MonoBehaviour
         return false;
     }
 
-    private void GlitchedButtonRelease()
+    private void ButtonRelease()
     {
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
         StartCoroutine(AnimateButton(-0.05f, 0f));
@@ -201,11 +201,11 @@ public class GlitchedButtonScript : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < duration)
         {
-            GlitchedButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        GlitchedButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
 #pragma warning disable 0414
@@ -241,9 +241,9 @@ public class GlitchedButtonScript : MonoBehaviour
         while (_highlightedBit != (p1 + inputBits.Length - 1) % 16)
             yield return "trycancel";
         if (isHold)
-            GlitchedButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
         else
-            GlitchedButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
     }
 
     private bool _isAutosolving;
@@ -254,18 +254,18 @@ public class GlitchedButtonScript : MonoBehaviour
         if (_isHeld && _holdIx != _flippedBit)
         {
             // Tank fake strike
-            GlitchedButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(0.1f);
         }
         if (!_isHeld)
         {
             while (_highlightedBit != _flippedBit)
                 yield return true;
-            GlitchedButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
         }
         while (_highlightedBit != _seqIx)
             yield return true;
-        GlitchedButtonSelectable.OnInteractEnded();
+        ButtonSelectable.OnInteractEnded();
         yield break;
     }
 }

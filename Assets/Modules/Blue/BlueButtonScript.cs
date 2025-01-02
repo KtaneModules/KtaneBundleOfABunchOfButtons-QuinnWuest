@@ -14,8 +14,8 @@ public class BlueButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMAudio Audio;
     public KMBombInfo BombInfo;
-    public KMSelectable BlueButtonSelectable;
-    public GameObject BlueButtonCap;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
 
     public Transform PolyominoesParent;
     public Transform ColorsParent;
@@ -89,8 +89,8 @@ public class BlueButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        BlueButtonSelectable.OnInteract += BlueButtonPress;
-        BlueButtonSelectable.OnInteractEnded += BlueButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
         ColorsSpotlight.range *= transform.lossyScale.x;
         _maskMaterials = MaskShaderManager.MakeMaterials();
         _maskMaterials.Text.mainTexture = WordResultText.GetComponent<MeshRenderer>().sharedMaterial.mainTexture;
@@ -113,7 +113,7 @@ public class BlueButtonScript : MonoBehaviour
         MaskShaderManager.Clear();
     }
 
-    private bool BlueButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -124,7 +124,7 @@ public class BlueButtonScript : MonoBehaviour
         return false;
     }
 
-    private void BlueButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -821,11 +821,11 @@ public class BlueButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            BlueButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        BlueButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
 #pragma warning disable 0414
@@ -837,9 +837,9 @@ public class BlueButtonScript : MonoBehaviour
         if (Regex.IsMatch(command, @"^\s*reset\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.75f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
             yield break;
         }
@@ -847,9 +847,9 @@ public class BlueButtonScript : MonoBehaviour
         if (_stage == Stage.Polyominoes && Regex.IsMatch(command, @"^\s*tap\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
             yield break;
         }
@@ -868,8 +868,8 @@ public class BlueButtonScript : MonoBehaviour
             yield return null;
             while (_colorHighlight != (ix + cmd.Length - 1) % _colorStageColors.Length)
                 yield return null;
-            BlueButtonSelectable.OnInteract();
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
             yield break;
         }
@@ -885,9 +885,9 @@ public class BlueButtonScript : MonoBehaviour
             yield return null;
             for (; val > 0; val--)
             {
-                BlueButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 yield return new WaitForSeconds(.1f);
-                BlueButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 yield return new WaitForSeconds(.1f);
             }
             yield break;
@@ -906,21 +906,21 @@ public class BlueButtonScript : MonoBehaviour
             yield return null;
 
             _tpOverrideRAB = new[] { len1, len2, len3 };
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f + .2f * len1);
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f + .2f * len2);
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f + .2f * len3);
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
             if (_tpOverriddenRAB)
                 Debug.LogFormat("<The Blue Button #{0}> TP lag override applied.", _moduleId);
@@ -938,8 +938,8 @@ public class BlueButtonScript : MonoBehaviour
                     continue;
                 while (_wordHighlight != ch - '1')
                     yield return null;
-                BlueButtonSelectable.OnInteract();
-                BlueButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteractEnded();
                 yield return new WaitForSeconds(.2f);
             }
             yield break;
@@ -950,9 +950,9 @@ public class BlueButtonScript : MonoBehaviour
     {
         if (_stage == Stage.Polyominoes)
         {
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(1.5f);
         }
 
@@ -960,8 +960,8 @@ public class BlueButtonScript : MonoBehaviour
         {
             while (_colorHighlight != 3)
                 yield return true;
-            BlueButtonSelectable.OnInteract();
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(1.5f);
         }
 
@@ -969,9 +969,9 @@ public class BlueButtonScript : MonoBehaviour
         {
             for (var val = _equationOffsets[3] - _eqTaps; val > 0; val--)
             {
-                BlueButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 yield return new WaitForSeconds(.1f);
-                BlueButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 yield return new WaitForSeconds(.1f);
             }
             yield return new WaitForSeconds(1.4f);
@@ -999,21 +999,21 @@ public class BlueButtonScript : MonoBehaviour
                 len3 = swapSlot == 0 ? 1 : swapSlot == 1 ? 1 : swapSlot == 2 ? 3 : 3;
             }
 
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f + .2f * len1);
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f + .2f * len2);
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f + .2f * len3);
-            BlueButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             yield return new WaitForSeconds(.1f);
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(submitting ? 1.4f : .1f);
         }
 
@@ -1026,8 +1026,8 @@ public class BlueButtonScript : MonoBehaviour
 
             while (_wordHighlight != requiredHighlight)
                 yield return true;
-            BlueButtonSelectable.OnInteract();
-            BlueButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.2f);
         }
     }

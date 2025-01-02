@@ -9,8 +9,8 @@ public class RedButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMBombInfo BombInfo;
     public KMAudio Audio;
-    public KMSelectable RedButtonSelectable;
-    public GameObject RedButtonCap;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
     public TextMesh _buttonText;
     public TextMesh[] _topText, _bottomText, _lightsText;
     public Color[] _textColors;
@@ -31,8 +31,8 @@ public class RedButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        RedButtonSelectable.OnInteract += RedButtonPress;
-        RedButtonSelectable.OnInteractEnded += RedButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
 
         _buttonSymbol = Rnd.Range(0, 8);
         _buttonText.text = _logicGates.Substring(_buttonSymbol, 1);
@@ -96,7 +96,7 @@ public class RedButtonScript : MonoBehaviour
     }
 
 
-    private bool RedButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -108,7 +108,7 @@ public class RedButtonScript : MonoBehaviour
         return false;
     }
 
-    private void RedButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -126,11 +126,11 @@ public class RedButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            RedButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        RedButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
     private void Update()
@@ -222,7 +222,7 @@ public class RedButtonScript : MonoBehaviour
             var current = (int) BombInfo.GetTime() % 10;
             while ((int) BombInfo.GetTime() % 10 == current)
                 yield return null;
-            yield return new[] { RedButtonSelectable };
+            yield return new[] { ButtonSelectable };
             yield break;
         }
 
@@ -236,12 +236,12 @@ public class RedButtonScript : MonoBehaviour
             yield return null;
             while ((int) BombInfo.GetTime() % 10 != holdTime)
                 yield return "trycancel";
-            RedButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             if (holdTime == releaseTime)
                 yield return new WaitForSeconds(1f);
             while ((int) BombInfo.GetTime() % 10 != releaseTime)
                 yield return null;
-            RedButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
         }
     }
@@ -254,17 +254,17 @@ public class RedButtonScript : MonoBehaviour
             var next = (cur + (ZenModeActive ? 1 : 9)) % 10;
             if (_currentValues[next] != _solutionValues[next])
             {
-                RedButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 while ((int) BombInfo.GetTime() % 10 == cur)
                     yield return null;
-                RedButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 yield return new WaitForSeconds(.1f);
             }
 
             if (Enumerable.Range(0, 10).All(ix => _currentValues[ix] == _solutionValues[ix]))
             {
-                RedButtonSelectable.OnInteract();
-                RedButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteractEnded();
             }
 
             yield return true;

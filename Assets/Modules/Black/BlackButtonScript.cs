@@ -10,7 +10,7 @@ public class BlackButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMBombInfo BombInfo;
     public KMAudio Audio;
-    public KMSelectable BlackButtonSelectable;
+    public KMSelectable ButtonSelectable;
     public GameObject ButtonCap;
     public Material[] BandColors;
     public MeshRenderer[] Resistor1Bands, Resistor2Bands, Resistor3Bands;
@@ -27,8 +27,8 @@ public class BlackButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        BlackButtonSelectable.OnInteract += BlackButtonPress;
-        BlackButtonSelectable.OnInteractEnded += BlackButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
 
         tryAgain:
         int[] resistences = new int[] { Rnd.Range(0, 1000), Rnd.Range(0, 1000), Rnd.Range(0, 1000) };
@@ -87,7 +87,7 @@ public class BlackButtonScript : MonoBehaviour
         Debug.LogFormat("[The Black Button #{0}] Hold for between {1} and {2} seconds.", _moduleId, _minTime, _maxTime);
     }
 
-    private bool BlackButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
@@ -95,7 +95,7 @@ public class BlackButtonScript : MonoBehaviour
         return false;
     }
 
-    private void BlackButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -149,10 +149,10 @@ public class BlackButtonScript : MonoBehaviour
         if (m.Success && int.TryParse(m.Groups[1].Value, out v))
         {
             yield return null;
-            BlackButtonSelectable.OnInteract();
+            ButtonSelectable.OnInteract();
             while (Time.time - _lastHeldTime < v)
                 yield return null;
-            BlackButtonSelectable.OnInteractEnded();
+            ButtonSelectable.OnInteractEnded();
             yield return new WaitForSeconds(.1f);
         }
 
@@ -166,10 +166,10 @@ public class BlackButtonScript : MonoBehaviour
 
     public IEnumerator TwitchHandleForcedSolve()
     {
-        BlackButtonSelectable.OnInteract();
+        ButtonSelectable.OnInteract();
         while (Time.time - _lastHeldTime < _minTime)
             yield return null;
-        BlackButtonSelectable.OnInteractEnded();
+        ButtonSelectable.OnInteractEnded();
         yield return new WaitForSeconds(.1f);
     }
 }

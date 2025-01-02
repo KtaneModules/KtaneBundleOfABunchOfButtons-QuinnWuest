@@ -11,12 +11,12 @@ public class CyanButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMBombInfo BombInfo;
     public KMAudio Audio;
-    public KMSelectable CyanButtonSelectable;
-    public GameObject CyanButtonCap;
-    public GameObject CyanButtonObj;
-    public GameObject CyanButtonSelObj;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
+    public GameObject ButtonObj;
+    public GameObject ButtonSelObj;
     public GameObject[] LeftDoors, RightDoors;
-    public TextMesh CyanScreenText;
+    public TextMesh ScreenText;
 
     private static int _moduleIdCounter = 1;
     private int _moduleId;
@@ -36,19 +36,19 @@ public class CyanButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        CyanButtonSelectable.OnInteract += CyanButtonPress;
-        CyanButtonSelectable.OnInteractEnded += CyanButtonRelease;
+        ButtonSelectable.OnInteract += ButtonPress;
+        ButtonSelectable.OnInteractEnded += ButtonRelease;
         GenerateButtonSequence();
     }
 
-    private bool CyanButtonPress()
+    private bool ButtonPress()
     {
         StartCoroutine(AnimateButton(0f, -0.05f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonPress, transform);
         return false;
     }
 
-    private void CyanButtonRelease()
+    private void ButtonRelease()
     {
         StartCoroutine(AnimateButton(-0.05f, 0f));
         Audio.PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.BigButtonRelease, transform);
@@ -60,7 +60,7 @@ public class CyanButtonScript : MonoBehaviour
     {
         for (int i = 0; i < 6; i++)
             _buttonPositions[i] = Rnd.Range(0, 6);
-        CyanButtonObj.transform.localPosition = new Vector3(xPos[_buttonPositions[_currentStage]], 0.02f, zPos[_buttonPositions[_currentStage]]);
+        ButtonObj.transform.localPosition = new Vector3(xPos[_buttonPositions[_currentStage]], 0.02f, zPos[_buttonPositions[_currentStage]]);
         _correctPresses[0] = true;
         _correctPresses[1] =
             _buttonPositions[0] < 3 ||
@@ -96,7 +96,7 @@ public class CyanButtonScript : MonoBehaviour
         yield return new WaitForSeconds(1.6f);
         for (int i = _timerTime; i > 0; i--)
         {
-            CyanScreenText.text = i.ToString("00");
+            ScreenText.text = i.ToString("00");
             yield return new WaitForSeconds(1f);
         }
         DoButtonLogic(false);
@@ -107,7 +107,7 @@ public class CyanButtonScript : MonoBehaviour
         if (_timer != null)
             StopCoroutine(_timer);
         int prevPos = _buttonPositions[_currentStage];
-        CyanScreenText.text = "--";
+        ScreenText.text = "--";
         if (_correctPresses[_currentStage] != pressed)
         {
             if (pressed)
@@ -156,11 +156,11 @@ public class CyanButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            CyanButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        CyanButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
     private IEnumerator OpenDoors(int b, bool isEjecting)
@@ -194,7 +194,7 @@ public class CyanButtonScript : MonoBehaviour
         RightDoors[b].transform.localEulerAngles = new Vector3(0f, 0f, 0f);
         Audio.PlaySoundAtTransform("DoorClose", transform);
         if (!isEjecting)
-            CyanButtonObj.SetActive(false);
+            ButtonObj.SetActive(false);
         _isAnimating = false;
     }
 
@@ -204,38 +204,38 @@ public class CyanButtonScript : MonoBehaviour
         if (isEjecting)
         {
             nextYPos = 0.02f;
-            CyanButtonObj.SetActive(true);
+            ButtonObj.SetActive(true);
             yield return new WaitForSeconds(0.2f);
         }
         else
-            CyanButtonSelObj.SetActive(false);
+            ButtonSelObj.SetActive(false);
         var duration = 0.3f;
         var elapsed = 0f;
         while (elapsed < duration)
         {
             if (isEjecting)
-                CyanButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsed, 0f, 0.05f, duration), zPos[b]);
+                ButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsed, 0f, 0.05f, duration), zPos[b]);
             else
-                CyanButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsed, 0.02f, 0.05f, duration), zPos[b]);
+                ButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsed, 0.02f, 0.05f, duration), zPos[b]);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        CyanButtonObj.transform.localPosition = new Vector3(xPos[b], 0.05f, zPos[b]);
+        ButtonObj.transform.localPosition = new Vector3(xPos[b], 0.05f, zPos[b]);
         var durationSecond = 0.3f;
         var elapsedSecond = 0f;
         while (elapsedSecond < durationSecond)
         {
             if (isEjecting)
-                CyanButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsedSecond, 0.05f, 0.02f, durationSecond), zPos[b]);
+                ButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsedSecond, 0.05f, 0.02f, durationSecond), zPos[b]);
             else
-                CyanButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsedSecond, 0.05f, 0f, durationSecond), zPos[b]);
+                ButtonObj.transform.localPosition = new Vector3(xPos[b], Easing.InOutQuad(elapsedSecond, 0.05f, 0f, durationSecond), zPos[b]);
             yield return null;
             elapsedSecond += Time.deltaTime;
         }
-        CyanButtonObj.transform.localPosition = new Vector3(xPos[b], nextYPos, zPos[b]);
+        ButtonObj.transform.localPosition = new Vector3(xPos[b], nextYPos, zPos[b]);
         if (isEjecting)
         {
-            CyanButtonSelObj.SetActive(true);
+            ButtonSelObj.SetActive(true);
             _buttonVisible = true;
         }
     }
@@ -247,7 +247,7 @@ public class CyanButtonScript : MonoBehaviour
     {
         if (!_autoSolving)
             _timerTime = 30;
-        return _moduleSolved || !Regex.IsMatch(command, @"^\s*(tap|press|submit|click)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) ? null : new[] { CyanButtonSelectable };
+        return _moduleSolved || !Regex.IsMatch(command, @"^\s*(tap|press|submit|click)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) ? null : new[] { ButtonSelectable };
     }
 
     public IEnumerator TwitchHandleForcedSolve()
@@ -260,9 +260,9 @@ public class CyanButtonScript : MonoBehaviour
             {
                 while (!_buttonVisible)
                     yield return null;
-                CyanButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 yield return new WaitForSeconds(.1f);
-                CyanButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 yield return null;
             }
             yield return null;

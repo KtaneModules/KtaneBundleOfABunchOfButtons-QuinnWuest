@@ -1133,13 +1133,12 @@ MonoBehaviour:
   Module: {fileID: 114445151190721914}
   Audio: {fileID: 114629500169079468}
   BombInfo: {fileID: 114851826596115828}
-  MaroonButtonSelectable: {fileID: 114303559387390978}
-  MaroonButtonCap: {fileID: 1064130632272964}
-  MaroonButtonScreen: {fileID: 23064962815927692}
+  ButtonSelectable: {fileID: 114303559387390978}
+  ButtonCap: {fileID: 1064130632272964}
+  Screen: {fileID: 23064962815927692}
   FlagSelectedScreenMaterial: {fileID: 2100000, guid: 175f1c9c98a142142926d38a7219136c,
     type: 2}
-  MaroonButtonScreenMaterial: {fileID: 2100000, guid: 6cc93b5ffe42de94c8e8ba4dc382c4e2,
-    type: 2}
+  ScreenMaterial: {fileID: 2100000, guid: 6cc93b5ffe42de94c8e8ba4dc382c4e2, type: 2}
   Mask: {fileID: 23093171808732508}
   MaskShaderManager: {fileID: 114605853814931052}
   FlagsParent: {fileID: 4885776836982006}

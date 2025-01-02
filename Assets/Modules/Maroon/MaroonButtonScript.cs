@@ -12,11 +12,11 @@ public class MaroonButtonScript : MonoBehaviour
     public KMBombModule Module;
     public KMAudio Audio;
     public KMBombInfo BombInfo;
-    public KMSelectable MaroonButtonSelectable;
-    public GameObject MaroonButtonCap;
-    public MeshRenderer MaroonButtonScreen;
+    public KMSelectable ButtonSelectable;
+    public GameObject ButtonCap;
+    public MeshRenderer Screen;
     public Material FlagSelectedScreenMaterial;
-    public Material MaroonButtonScreenMaterial;
+    public Material ScreenMaterial;
 
     public MeshRenderer Mask;
     public MaskShaderManager MaskShaderManager;
@@ -55,8 +55,8 @@ public class MaroonButtonScript : MonoBehaviour
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
-        MaroonButtonSelectable.OnInteract += MaroonButtonPress;
-        MaroonButtonSelectable.OnInteractEnded += MaroonButtonRelease;
+        ButtonSelectable.OnInteract += MaroonButtonPress;
+        ButtonSelectable.OnInteractEnded += MaroonButtonRelease;
         _maskMaterials = MaskShaderManager.MakeMaterials();
         Mask.sharedMaterial = _maskMaterials.Mask;
 
@@ -228,7 +228,7 @@ public class MaroonButtonScript : MonoBehaviour
 
     private IEnumerator ShowCheckmark(int i)
     {
-        MaroonButtonScreen.material = FlagSelectedScreenMaterial;
+        Screen.material = FlagSelectedScreenMaterial;
         yield return Animation(.3f, t =>
         {
             var nt = Easing.BackOut(t, 0, 1, 1);
@@ -239,7 +239,7 @@ public class MaroonButtonScript : MonoBehaviour
                 checkmarkObj.SetActive(t > 0);
             }
         });
-        MaroonButtonScreen.material = MaroonButtonScreenMaterial;
+        Screen.material = ScreenMaterial;
     }
 
     private GameObject MakeGameObject(string name, Transform parent, float scale, Vector3? position = null, Quaternion? rotation = null)
@@ -262,11 +262,11 @@ public class MaroonButtonScript : MonoBehaviour
         var elapsed = 0f;
         while (elapsed < duration)
         {
-            MaroonButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
+            ButtonCap.transform.localPosition = new Vector3(0f, Easing.InOutQuad(elapsed, a, b, duration), 0f);
             yield return null;
             elapsed += Time.deltaTime;
         }
-        MaroonButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
+        ButtonCap.transform.localPosition = new Vector3(0f, b, 0f);
     }
 
 #pragma warning disable 0414
@@ -303,7 +303,7 @@ public class MaroonButtonScript : MonoBehaviour
                 while (flagHighlight != pressIndex)
                     yield return "trycancel";
 
-                yield return new[] { MaroonButtonSelectable };
+                yield return new[] { ButtonSelectable };
             }
         }
     }
@@ -315,9 +315,9 @@ public class MaroonButtonScript : MonoBehaviour
             yield return true;
             if (flagHighlight == submitOrder[submitIndex])
             {
-                MaroonButtonSelectable.OnInteract();
+                ButtonSelectable.OnInteract();
                 yield return new WaitForSeconds(.1f);
-                MaroonButtonSelectable.OnInteractEnded();
+                ButtonSelectable.OnInteractEnded();
                 yield return new WaitForSeconds(.1f);
             }
         }
