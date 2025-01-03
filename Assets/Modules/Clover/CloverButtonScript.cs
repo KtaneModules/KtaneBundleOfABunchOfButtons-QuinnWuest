@@ -72,17 +72,24 @@ public class CloverButtonScript : MonoBehaviour
     private class Transformation
     {
         private TransColourPair Colours;
+        private string Key;
         private Func<string, string> Function;
 
-        public Transformation(TransColourPair colours, Func<string, string> function)
+        public Transformation(TransColourPair colours, string key, Func<string, string> function)
         {
             Colours = colours;
+            Key = key;
             Function = function;
         }
 
         public TransColourPair GetColours()
         {
             return Colours;
+        }
+
+        public string GetKey()
+        {
+            return Key;
         }
 
         public string Invoke(string input)
@@ -98,7 +105,7 @@ public class CloverButtonScript : MonoBehaviour
         ButtonSelectable.OnInteractEnded += ButtonRelease;
 
         /*string tester = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        Transformation trans = new Transformation(new TransColourPair(TransColour.Red, TransColour.Green), delegate (string input) { return input.Reverse().Join(""); });
+        Transformation trans = new Transformation(new TransColourPair(TransColour.Red, TransColour.Green), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", delegate (string input) { return input.Reverse().Join(""); });
         Debug.Log(trans.Invoke(tester));*/
     }
     
