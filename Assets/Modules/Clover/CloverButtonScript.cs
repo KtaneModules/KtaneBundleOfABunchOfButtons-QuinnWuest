@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Rnd = UnityEngine.Random;
@@ -16,11 +17,89 @@ public class CloverButtonScript : MonoBehaviour
     private static int _moduleIdCounter = 1;
     private bool _moduleSolved;
 
+    private enum TransColour
+    {
+        Red,
+        Yellow,
+        Green,
+        Blue,
+        Pink,
+        White
+    }
+
+    private static Dictionary<TransColour, Color> TransColourToColor = new Dictionary<TransColour, Color>()
+    {
+        { TransColour.Red,      new Color(1, 0.25f, 0.25f) },
+        { TransColour.Yellow,   new Color(1, 1, 0.25f) },
+        { TransColour.Green,    new Color(0.25f, 1, 0.25f) },
+        { TransColour.Blue,     new Color(0.25f, 0.25f, 1) },
+        { TransColour.Pink,     new Color(0.25f, 0.625f, 1) },
+        { TransColour.White,    Color.white }
+    };
+
+    private class TransColourPair
+    {
+        private TransColour FirstColour;
+        private TransColour SecondColour;
+
+        public TransColourPair(TransColour firstColour, TransColour secondColour)
+        {
+            FirstColour = firstColour;
+            SecondColour = secondColour;
+        }
+
+        public TransColour GetFirstColour()
+        {
+            return FirstColour;
+        }
+
+        public TransColour GetSecondColour()
+        {
+            return SecondColour;
+        }
+
+        public Color GetFirstColourConverted()
+        {
+            return TransColourToColor[FirstColour];
+        }
+
+        public Color GetSecondColourConverted()
+        {
+            return TransColourToColor[SecondColour];
+        }
+    }
+
+    private class Transformation
+    {
+        private TransColourPair Colours;
+        private Func<string, string> Function;
+
+        public Transformation(TransColourPair colours, Func<string, string> function)
+        {
+            Colours = colours;
+            Function = function;
+        }
+
+        public TransColourPair GetColours()
+        {
+            return Colours;
+        }
+
+        public string Invoke(string input)
+        {
+            return Function.Invoke(input);
+        }
+    }
+
     private void Start()
     {
         _moduleId = _moduleIdCounter++;
         ButtonSelectable.OnInteract += ButtonPress;
         ButtonSelectable.OnInteractEnded += ButtonRelease;
+
+        /*string tester = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        Transformation trans = new Transformation(new TransColourPair(TransColour.Red, TransColour.Green), delegate (string input) { return input.Reverse().Join(""); });
+        Debug.Log(trans.Invoke(tester));*/
     }
     
     private bool ButtonPress()
