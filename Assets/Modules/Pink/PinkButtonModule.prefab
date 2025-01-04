@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114614678182639078}
   - component: {fileID: 135580416334720826}
   m_Layer: 0
-  m_Name: PinkButton
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4416705556115192}
   m_Layer: 0
-  m_Name: PinkScreen
+  m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 23351601378653724}
   - component: {fileID: 114710392137873284}
   m_Layer: 0
-  m_Name: PinkButtonCap
+  m_Name: ButtonCap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -492,7 +492,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1380502086834658}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.4}
+  m_LocalPosition: {x: 0.6, y: 0, z: -0.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4098223708378816}
@@ -829,7 +829,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: de9f7516e33c1be40a1f11e9136d6b84, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -967,9 +967,9 @@ MonoBehaviour:
   Module: {fileID: 114364446266736286}
   BombInfo: {fileID: 114322926091632060}
   Audio: {fileID: 114811360308008840}
-  PinkButtonSelectable: {fileID: 114614678182639078}
-  PinkButtonCap: {fileID: 1630417793567228}
-  PinkButtonText: {fileID: 102807208710249064}
+  ButtonSelectable: {fileID: 114614678182639078}
+  ButtonCap: {fileID: 1630417793567228}
+  ButtonText: {fileID: 102807208710249064}
   ModuleBG: {fileID: 23247948358846860}
 --- !u!114 &114291004707002222
 MonoBehaviour:

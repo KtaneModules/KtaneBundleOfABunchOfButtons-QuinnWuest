@@ -1716,7 +1716,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1962260446815250}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0, z: -0.2}
+  m_LocalPosition: {x: 0.4, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4733966397014052}
@@ -5288,7 +5288,7 @@ MonoBehaviour:
   Module: {fileID: 114445151190721914}
   BombInfo: {fileID: 114851826596115828}
   Audio: {fileID: 114629500169079468}
-  BlackButtonSelectable: {fileID: 114303559387390978}
+  ButtonSelectable: {fileID: 114303559387390978}
   ButtonCap: {fileID: 1064130632272964}
   BandColors:
   - {fileID: 2100000, guid: a237d82688bedb644907c32ca965dbfc, type: 2}

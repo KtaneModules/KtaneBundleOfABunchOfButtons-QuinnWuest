@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 114453287520968534}
   - component: {fileID: 135371217141225422}
   m_Layer: 0
-  m_Name: GlitchedButton
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 23425788327411594}
   - component: {fileID: 114562060343122854}
   m_Layer: 0
-  m_Name: GlitchedButtonCap
+  m_Name: ButtonCap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -268,7 +268,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4298568848369010}
   m_Layer: 0
-  m_Name: GlitchedScreen
+  m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -448,7 +448,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1503063762510754}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0, z: -0.4}
+  m_LocalPosition: {x: 0.4, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4746350581239948}
@@ -1026,8 +1026,8 @@ MonoBehaviour:
   Audio: {fileID: 114508681751683494}
   RuleSeedable: {fileID: 114096930158664690}
   Bomb: {fileID: 114113554108995660}
-  GlitchedButtonSelectable: {fileID: 114453287520968534}
-  GlitchedButtonCap: {fileID: 1158948505669176}
+  ButtonSelectable: {fileID: 114453287520968534}
+  ButtonCap: {fileID: 1158948505669176}
   Text: {fileID: 102002202630147202}
   TextRenderer: {fileID: 23715437356306058}
   MaskShaderManager: {fileID: 114803170922135000}

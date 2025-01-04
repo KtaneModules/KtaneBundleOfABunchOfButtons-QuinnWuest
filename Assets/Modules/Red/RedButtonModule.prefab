@@ -550,7 +550,7 @@ GameObject:
   - component: {fileID: 102741411328034404}
   - component: {fileID: 114702363268735918}
   m_Layer: 0
-  m_Name: RedButtonText
+  m_Name: ButtonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -586,7 +586,7 @@ GameObject:
   - component: {fileID: 23734011542487922}
   - component: {fileID: 114032372363479636}
   m_Layer: 0
-  m_Name: RedButtonCap
+  m_Name: ButtonCap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -762,7 +762,7 @@ GameObject:
   - component: {fileID: 114913588329598904}
   - component: {fileID: 135926522276942576}
   m_Layer: 0
-  m_Name: RedButton
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1403,7 +1403,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1911695503640214}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4171726633781186}
@@ -3855,8 +3855,8 @@ MonoBehaviour:
   Module: {fileID: 114706544570021006}
   BombInfo: {fileID: 114009667686921030}
   Audio: {fileID: 114737300500483396}
-  RedButtonSelectable: {fileID: 114913588329598904}
-  RedButtonCap: {fileID: 1028660870914862}
+  ButtonSelectable: {fileID: 114913588329598904}
+  ButtonCap: {fileID: 1028660870914862}
   _buttonText: {fileID: 102741411328034404}
   _topText:
   - {fileID: 102188285113168926}

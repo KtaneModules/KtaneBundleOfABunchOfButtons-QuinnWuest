@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 23266399715825526}
   - component: {fileID: 114461128958556938}
   m_Layer: 0
-  m_Name: GrayButtonSymbol
+  m_Name: ButtonSymbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195,7 +195,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4135353432328220}
   m_Layer: 0
-  m_Name: GrayScreen
+  m_Name: Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 23572104555119330}
   - component: {fileID: 114290710346374632}
   m_Layer: 0
-  m_Name: GrayButtonCap
+  m_Name: ButtonCap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 114215743768313496}
   - component: {fileID: 135437291430671860}
   m_Layer: 0
-  m_Name: GrayButton
+  m_Name: Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -748,7 +748,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1910637071254928}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.2, y: 0, z: -0.4}
+  m_LocalPosition: {x: 0.6, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4154201411354038}
@@ -1919,10 +1919,10 @@ MonoBehaviour:
   BombInfo: {fileID: 114440240834018088}
   Audio: {fileID: 114053005821605548}
   RuleSeedable: {fileID: 114658864792971414}
-  GrayButtonSelectable: {fileID: 114215743768313496}
-  GrayButtonCap: {fileID: 1628179643459866}
-  GrayButtonSymbol: {fileID: 23266399715825526}
-  GrayButtonText: {fileID: 102005303601107934}
+  ButtonSelectable: {fileID: 114215743768313496}
+  ButtonCap: {fileID: 1628179643459866}
+  ButtonSymbol: {fileID: 23266399715825526}
+  ScreenText: {fileID: 102005303601107934}
   Symbols:
   - {fileID: 2100000, guid: 0013b020ae303954588b219b0c47b379, type: 2}
   - {fileID: 2100000, guid: 3651d76a3c666ae4eba75f6a66c6d774, type: 2}
