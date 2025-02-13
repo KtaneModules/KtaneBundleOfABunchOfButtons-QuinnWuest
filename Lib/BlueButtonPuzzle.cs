@@ -43,7 +43,7 @@ namespace BunchOfButtonsLib
                     generatedPolys.Skip(1).Any(tup => tup.Polyomino == pl.Polyomino))
                 .ToArray();
 
-            IEnumerable<(int[] solution, PolyominoPlacement[] polys)> GenerateSolutions(List<(Polyomino one, Polyomino two)> noAllowTouch)
+            IEnumerable<(int[] solution, PolyominoPlacement[] polys)> GenerateSolutions(IEnumerable<(Polyomino one, Polyomino two)> noAllowTouch)
             {
                 var grid = givenGrid.ToArray();
                 var placements = possiblePlacements.ToList();
@@ -56,33 +56,38 @@ namespace BunchOfButtonsLib
                 return SolvePolyominoPuzzle(grid, 1, placements, noAllowTouch);
             }
 
-            var notAllowedToTouch = new List<(Polyomino one, Polyomino two)>();
-            while (true)
+            IEnumerable<(Polyomino one, Polyomino two)[]> findTouchConstraints((Polyomino one, Polyomino two)[] sofar)
             {
-                var solutions = GenerateSolutions(notAllowedToTouch).Take(2).ToArray();
+                var solutions = GenerateSolutions(sofar).Take(2).ToArray();
 
                 // Puzzle unique!
                 if (solutions.Length == 1)
-                    break;
+                {
+                    yield return sofar;
+                    yield break;
+                }
 
                 // Find a wrong solution
                 var (_, wrongAllPolys) = solutions.First(s => s.polys.Any(sPl => !generatedPolys.Contains(sPl)));
                 // Find all wrong polyominoes in this wrong solution
                 var wrongPolys = wrongAllPolys.Where(sPl => !generatedPolys.Contains(sPl)).ToArray();
-                // Find all polyominoes that touch a wrong polyomino in the wrong solution, but do not touch the corresponding correct polyomino in the correct solution
+                // Find all polyominoes that:
+                //  • touch a wrong polyomino in the wrong solution
+                //  • do not touch the corresponding correct polyomino in the correct solution
+                //  • aren’t already in ‘sofar’
                 var touchingPolys = wrongPolys.SelectMany(wPl => wrongAllPolys
-                      .Where(owPl => owPl.Touches(wPl) && !generatedPolys.First(gPl => gPl.Polyomino == wPl.Polyomino).Touches(generatedPolys.First(gPl => gPl.Polyomino == owPl.Polyomino)))
-                      .Select(owPl => (one: wPl.Polyomino, two: owPl.Polyomino)))
-                      .ToArray();
-                if (touchingPolys.Length == 0)  // We cannot disambiguate this puzzle with a no-touch constraint
-                    goto tryAgain;
+                    .Where(owPl => owPl.Touches(wPl) && !generatedPolys.First(gPl => gPl.Polyomino == wPl.Polyomino).Touches(generatedPolys.First(gPl => gPl.Polyomino == owPl.Polyomino)))
+                    .Select(owPl => (one: wPl.Polyomino, two: owPl.Polyomino)))
+                    .Where(tup => !sofar.Any(tup2 => tup.one == tup2.one || tup.one == tup2.two || tup.two == tup2.one || tup.two == tup2.two))
+                    .ToArray();
 
-                // Prefer one that isn’t already constrained
-                var prefIx = touchingPolys.IndexOf(tup1 =>
-                    !notAllowedToTouch.Any(tup2 => tup2.one == tup1.one || tup2.two == tup1.one) &&
-                    !notAllowedToTouch.Any(tup2 => tup2.one == tup1.two || tup2.two == tup1.two));
-                notAllowedToTouch.Add(touchingPolys[prefIx == -1 ? 0 : prefIx]);
+                foreach (var tup in touchingPolys)
+                    foreach (var solution in findTouchConstraints(sofar.Concat(new[] { tup }).ToArray()))
+                        yield return solution;
             }
+            var notAllowedToTouch = findTouchConstraints(new (Polyomino one, Polyomino two)[0]).FirstOrDefault();
+            if (notAllowedToTouch == null)
+                goto tryAgain;
 
             // Assign the polyominoes colors
             var colors = new int[generatedPolys.Length];
