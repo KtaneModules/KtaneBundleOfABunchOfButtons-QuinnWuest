@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,13 +139,19 @@ public class AquaButtonScript : MonoBehaviour
 
         _puzzle = AquaButtonPuzzle.GeneratePuzzle(seed);
 
-        Debug.LogFormat("[The Aqua Button #{0}] The solution word is {1}.", _moduleId, _puzzle.Word);
         Debug.LogFormat("[The Aqua Button #{0}] The given fruits are: {1}.", _moduleId,
             Enumerable.Range(0, 12).Select(x => $"{_fruitInfoDict[_puzzle.Clues[x]].FruitColor} {_fruitInfoDict[_puzzle.Clues[x]].FruitModel}").Join(", "));
         Debug.LogFormat("[The Aqua Button #{0}] The nonogram clues represented by these fruits are: {1}.", _moduleId,
             Enumerable.Range(0, 12).Select(x => _puzzle.Clues[x]).Join(", "));
         _submissionIx = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(BombInfo.GetSerialNumber()[0]) / 3;
         Debug.Log($"[The Aqua Button #{_moduleId}] The fruit to submit is the {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitColor} {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitModel} at {(_submissionIx < 6 ? "row " + (6 - _submissionIx) : "column " + ((_submissionIx % 6) + 1))}.");
+        Debug.Log($"[The Aqua Button #{_moduleId}] The solution to the bitmap is:");
+        for (int row = 0; row < 6; row++)
+        {
+            var bitmapRow = Enumerable.Range(row * 6, 6).Select(i => _puzzle.Bitmap[i] ? "█" : "░").Join("");
+            Debug.Log($"[The Aqua Button #{_moduleId}] {bitmapRow}");
+        }
+        Debug.Log($"[The Aqua Button #{_moduleId}] The solution word is {_puzzle.Word}.");
     }
 
     private bool ButtonPress()
@@ -207,7 +213,7 @@ public class AquaButtonScript : MonoBehaviour
                 }
                 else
                 {
-                    var nextLetter = (char) ('A' + ((_wordSection - 4) * 3 + _wordHighlight));
+                    var nextLetter = (char)('A' + ((_wordSection - 4) * 3 + _wordHighlight));
                     if (nextLetter != _puzzle.Word[_wordProgress])
                     {
                         Debug.Log($"[The Aqua Button #{_moduleId}] Stage 2: You submitted {nextLetter} for letter #{_wordProgress + 1}. Strike!");
@@ -331,10 +337,10 @@ public class AquaButtonScript : MonoBehaviour
             {
                 int ix = (i + randomOffset) % 12;
                 var shapeObj = MakeGameObject(string.Format("Shape {0}", ix + 1), scroller.transform, position: new Vector3(width, .01625f, 0), scale: new Vector3(.04f, .04f, .04f));
-                shapeObj.AddComponent<MeshFilter>().sharedMesh = FruitMeshes[(int) _fruitInfoDict[_puzzle.Clues[ix]].FruitModel];
+                shapeObj.AddComponent<MeshFilter>().sharedMesh = FruitMeshes[(int)_fruitInfoDict[_puzzle.Clues[ix]].FruitModel];
                 var mr = shapeObj.AddComponent<MeshRenderer>();
                 mr.material = _maskMaterials.DiffuseTint;
-                mr.material.color = FruitColors[(int) _fruitInfoDict[_puzzle.Clues[ix]].FruitColor];
+                mr.material.color = FruitColors[(int)_fruitInfoDict[_puzzle.Clues[ix]].FruitColor];
 
                 width += separation;
                 shapeObjs.Add(shapeObj.transform);
@@ -399,18 +405,18 @@ public class AquaButtonScript : MonoBehaviour
                 yield return Animation(2.6f, t =>
                 {
                     WordResultText.transform.localPosition = Vector3.Lerp(new Vector3(0, -.02f, -.03f), new Vector3(0, 0, 0), Easing.InOutQuad(t, 0, 1, 1));
-                    WordResultText.transform.localScale = Vector3.Lerp(new Vector3(.015f, .015f, .015f), new Vector3(.025f, .025f, .025f), Easing.InOutQuad(t, 0, 1, 1));
+                    WordResultText.transform.localScale = Vector3.Lerp(new Vector3(.015f, .015f, .015f), new Vector3(.0225f, .0225f, .0225f), Easing.InOutQuad(t, 0, 1, 1));
                     WordResultText.color = Color.Lerp(new Color32(0xE1, 0xE1, 0xE1, 0xFF), new Color32(0x0D, 0xE1, 0x0F, 0xFF), Easing.InOutQuad(t, 0, 1, 1));
                 });
                 yield break;
             }
             else
             {
-                _wordHighlight = (int) ((Time.time % 1.8f) / 1.8f * 3);
+                _wordHighlight = (int)((Time.time % 1.8f) / 1.8f * 3);
                 for (var i = 0; i < 3; i++)
                 {
                     WordTexts[i].gameObject.SetActive(true);
-                    WordTexts[i].color = i == _wordHighlight ? Color.white : (Color) new Color32(0x1B, 0x37, 0x73, 0xFF);
+                    WordTexts[i].color = i == _wordHighlight ? Color.white : (Color)new Color32(0x1B, 0x37, 0x73, 0xFF);
                 }
                 WordResultText.text = _puzzle.Word.Substring(0, _wordProgress) + "_";
 
@@ -423,12 +429,12 @@ public class AquaButtonScript : MonoBehaviour
                 else if (_wordSection <= 3)
                 {
                     for (var triplet = 0; triplet < 3; triplet++)
-                        WordTexts[triplet].text = _wordSection == 3 && triplet == 2 ? "YZ" : Enumerable.Range(0, 3).Select(ltr => (char) ('A' + (_wordSection - 1) * 9 + 3 * triplet + ltr)).Join("");
+                        WordTexts[triplet].text = _wordSection == 3 && triplet == 2 ? "YZ" : Enumerable.Range(0, 3).Select(ltr => (char)('A' + (_wordSection - 1) * 9 + 3 * triplet + ltr)).Join("");
                 }
                 else
                 {
                     for (var ltr = 0; ltr < 3; ltr++)
-                        WordTexts[ltr].text = _wordSection == 12 && ltr == 2 ? "" : ((char) ('A' + ((_wordSection - 4) * 3 + ltr))).ToString();
+                        WordTexts[ltr].text = _wordSection == 12 && ltr == 2 ? "" : ((char)('A' + ((_wordSection - 4) * 3 + ltr))).ToString();
                 }
                 yield return null;
             }
@@ -486,11 +492,11 @@ public class AquaButtonScript : MonoBehaviour
                 int cIx, frIx;
                 if (pieces[i].Length == 2 && (cIx = Array.IndexOf(colors, pieces[i].Substring(0, 1))) != -1 && (frIx = Array.IndexOf(fruits, pieces[i].Substring(1))) != -1)
                 {
-                    ixs.Add(new FruitInfo((FruitModel) frIx, (FruitColor) cIx));
+                    ixs.Add(new FruitInfo((FruitModel)frIx, (FruitColor)cIx));
                 }
                 else if ((cIx = Array.IndexOf(colors, pieces[i].Substring(0, 1))) != -1 && i < pieces.Length - 1 && (frIx = Array.IndexOf(fruits, pieces[i + 1].Substring(0, 2))) != -1)
                 {
-                    ixs.Add(new FruitInfo((FruitModel) frIx, (FruitColor) cIx));
+                    ixs.Add(new FruitInfo((FruitModel)frIx, (FruitColor)cIx));
                     i++;
                 }
                 else
