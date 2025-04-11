@@ -27,9 +27,9 @@ namespace BunchOfButtonsLib
                     bitmap[2 * (i % 3) + (dot / 3) + 6 * (3 * (i / 3) + (dot % 3))] = BrailleBits[word[i] - 'A'][dot];
 
             var colClues = Enumerable.Range(0, 6).Select(col => Enumerable.Range(0, 6).Select(y => bitmap[col + 6 * y]).CreateNonogramClue().JoinString(" ")).Select(i => i.Length == 0 ? "0" : i).ToArray();
-            var rowClues = Enumerable.Range(0, 6).Select(row => Enumerable.Range(0, 6).Select(x => bitmap[x + 6 * row]).CreateNonogramClue().JoinString(" ")).Select(i => i.Length == 0 ? "0" : i).ToArray();
+            var rowClues = Enumerable.Range(0, 6).Select(row => Enumerable.Range(0, 6).Select(x => bitmap[x + 6 * row]).CreateNonogramClue().JoinString(" ")).Select(i => i.Length == 0 ? "0" : i).Reverse().ToArray();
 
-            return new AquaButtonPuzzle { Clues = colClues.Concat(rowClues).ToArray(), Word = word };
+            return new AquaButtonPuzzle { Clues = rowClues.Concat(colClues).ToArray(), Word = word };
         }
     }
 }

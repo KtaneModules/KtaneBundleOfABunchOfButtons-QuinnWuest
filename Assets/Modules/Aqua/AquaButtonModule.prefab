@@ -1392,13 +1392,13 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 8cd4d2f70d3f9d1429ca1f8f0f372ceb, type: 3}
   - {fileID: 4300000, guid: d8ce03c7d6bc3734eaf80756d74247e4, type: 3}
   - {fileID: 4300002, guid: 6b243e403abbbbd41b9f0b4266e6d77b, type: 3}
+  - {fileID: 4300000, guid: 82bd4c3a29fcd814b88c877151d10014, type: 3}
   - {fileID: 4300000, guid: 5fa54d3adb1538840b2b96b0c095aad5, type: 3}
   - {fileID: 4300000, guid: 06bdc33c47284624fb0d116cee42c0eb, type: 3}
-  - {fileID: 4300000, guid: f86a535ff0a36c049a5cb8ebb0d5eb5c, type: 3}
   FruitColors:
-  - {r: 0.74264705, g: 0, b: 0, a: 0}
+  - {r: 0.6397059, g: 0.08466696, b: 0.08466696, a: 0}
   - {r: 0.61764705, g: 0.6006085, b: 0, a: 0}
-  - {r: 0.10002163, g: 0.13983703, b: 0.5441177, a: 0}
+  - {r: 0.14478807, g: 0.25040272, b: 0.75735295, a: 0}
   FruitsSpotlight: {fileID: 108724857767962276}
 --- !u!114 &114255974477715666
 MonoBehaviour:

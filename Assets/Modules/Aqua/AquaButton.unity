@@ -306,21 +306,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114252044465296086, guid: 273abf0309269f548b5121961d2973cf,
-        type: 2}
-      propertyPath: FruitMeshes.Array.data[4]
-      value: 
-      objectReference: {fileID: 4300000, guid: 82bd4c3a29fcd814b88c877151d10014, type: 3}
-    - target: {fileID: 114252044465296086, guid: 273abf0309269f548b5121961d2973cf,
-        type: 2}
-      propertyPath: FruitMeshes.Array.data[6]
-      value: 
-      objectReference: {fileID: 4300000, guid: 06bdc33c47284624fb0d116cee42c0eb, type: 3}
-    - target: {fileID: 114252044465296086, guid: 273abf0309269f548b5121961d2973cf,
-        type: 2}
-      propertyPath: FruitMeshes.Array.data[5]
-      value: 
-      objectReference: {fileID: 4300000, guid: 5fa54d3adb1538840b2b96b0c095aad5, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 273abf0309269f548b5121961d2973cf, type: 2}
   m_IsPrefabParent: 0

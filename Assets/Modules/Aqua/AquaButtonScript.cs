@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 using BunchOfButtonsLib;
+using KModkit;
 using UnityEngine;
 using UnityEngine.Video;
 using Rnd = UnityEngine.Random;
@@ -38,6 +39,7 @@ public class AquaButtonScript : MonoBehaviour
     private int _wordHighlight;
     private int _wordSection;
     private int _wordProgress;
+    private int _submissionIx;
 
     // Internals
     private static int _moduleIdCounter = 1;
@@ -82,27 +84,27 @@ public class AquaButtonScript : MonoBehaviour
 
     public static readonly Dictionary<string, FruitInfo> _fruitInfoDict = new Dictionary<string, FruitInfo>
     {
-        ["0"] = new FruitInfo(FruitModel.Apple, FruitColor.Red),
-        ["1"] = new FruitInfo(FruitModel.Banana, FruitColor.Red),
-        ["2"] = new FruitInfo(FruitModel.Cherry, FruitColor.Red),
-        ["3"] = new FruitInfo(FruitModel.Grape, FruitColor.Red),
-        ["4"] = new FruitInfo(FruitModel.Lemon, FruitColor.Red),
-        ["5"] = new FruitInfo(FruitModel.Pineapple, FruitColor.Red),
-        ["6"] = new FruitInfo(FruitModel.Strawberry, FruitColor.Red),
-        ["1 1"] = new FruitInfo(FruitModel.Apple, FruitColor.Yellow),
-        ["1 2"] = new FruitInfo(FruitModel.Banana, FruitColor.Yellow),
-        ["1 3"] = new FruitInfo(FruitModel.Cherry, FruitColor.Yellow),
-        ["1 4"] = new FruitInfo(FruitModel.Grape, FruitColor.Yellow),
-        ["2 1"] = new FruitInfo(FruitModel.Lemon, FruitColor.Yellow),
-        ["2 2"] = new FruitInfo(FruitModel.Pineapple, FruitColor.Yellow),
-        ["2 3"] = new FruitInfo(FruitModel.Strawberry, FruitColor.Yellow),
-        ["3 1"] = new FruitInfo(FruitModel.Apple, FruitColor.Blue),
-        ["3 2"] = new FruitInfo(FruitModel.Banana, FruitColor.Blue),
-        ["4 1"] = new FruitInfo(FruitModel.Cherry, FruitColor.Blue),
-        ["1 1 1"] = new FruitInfo(FruitModel.Grape, FruitColor.Blue),
-        ["1 1 2"] = new FruitInfo(FruitModel.Lemon, FruitColor.Blue),
-        ["1 2 1"] = new FruitInfo(FruitModel.Pineapple, FruitColor.Blue),
-        ["2 1 1"] = new FruitInfo(FruitModel.Strawberry, FruitColor.Blue)
+        ["0"] = new FruitInfo(FruitModel.Grape, FruitColor.Yellow),
+        ["1"] = new FruitInfo(FruitModel.Strawberry, FruitColor.Blue),
+        ["2"] = new FruitInfo(FruitModel.Grape, FruitColor.Blue),
+        ["3"] = new FruitInfo(FruitModel.Pineapple, FruitColor.Red),
+        ["4"] = new FruitInfo(FruitModel.Apple, FruitColor.Yellow),
+        ["5"] = new FruitInfo(FruitModel.Strawberry, FruitColor.Yellow),
+        ["6"] = new FruitInfo(FruitModel.Grape, FruitColor.Red),
+        ["1 1"] = new FruitInfo(FruitModel.Strawberry, FruitColor.Red),
+        ["1 2"] = new FruitInfo(FruitModel.Banana, FruitColor.Blue),
+        ["1 3"] = new FruitInfo(FruitModel.Lemon, FruitColor.Blue),
+        ["1 4"] = new FruitInfo(FruitModel.Apple, FruitColor.Blue),
+        ["2 1"] = new FruitInfo(FruitModel.Lemon, FruitColor.Red),
+        ["2 2"] = new FruitInfo(FruitModel.Cherry, FruitColor.Red),
+        ["2 3"] = new FruitInfo(FruitModel.Banana, FruitColor.Red),
+        ["3 1"] = new FruitInfo(FruitModel.Pineapple, FruitColor.Yellow),
+        ["3 2"] = new FruitInfo(FruitModel.Apple, FruitColor.Red),
+        ["4 1"] = new FruitInfo(FruitModel.Banana, FruitColor.Yellow),
+        ["1 1 1"] = new FruitInfo(FruitModel.Lemon, FruitColor.Yellow),
+        ["1 1 2"] = new FruitInfo(FruitModel.Pineapple, FruitColor.Blue),
+        ["1 2 1"] = new FruitInfo(FruitModel.Cherry, FruitColor.Blue),
+        ["2 1 1"] = new FruitInfo(FruitModel.Cherry, FruitColor.Yellow)
     };
 
     enum Stage
@@ -139,13 +141,17 @@ public class AquaButtonScript : MonoBehaviour
 
         _puzzle = AquaButtonPuzzle.GeneratePuzzle(seed);
 
-        var a = _puzzle.Clues.Select(i => _fruitInfoDict[i]).ToArray();
+        Debug.LogFormat("[The Aqua Button #{0}] The solution word is {1}.", _moduleId, _puzzle.Word);
         Debug.LogFormat("[The Aqua Button #{0}] The given fruits are: {1}.", _moduleId,
             Enumerable.Range(0, 12)
             .Select(x => _fruitInfoDict[_puzzle.Clues[x]].FruitColor.ToString() + " " + _fruitInfoDict[_puzzle.Clues[x]].FruitModel.ToString()).Join(", "));
         Debug.LogFormat("[The Aqua Button #{0}] The nonogram clues represented by these fruits are: {1}.", _moduleId,
             Enumerable.Range(0, 12).Select(x => _puzzle.Clues[x]).ToArray().Join(", "));
-        Debug.LogFormat("[The Aqua Button #{0}] The solution word is {1}.", _moduleId, _puzzle.Word);
+        _submissionIx = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(BombInfo.GetSerialNumber()[0]) / 3;
+        int thing = _submissionIx < 6 ? (5 - _submissionIx) : _submissionIx;
+        Debug.LogFormat("[The Aqua Button #{0}] The fruit to submit is the {1} at {2}.", _moduleId,
+            _fruitInfoDict[_puzzle.Clues[thing]].FruitColor.ToString() + " " + _fruitInfoDict[_puzzle.Clues[thing]].FruitModel.ToString(),
+            _submissionIx < 6 ? "row " + (_submissionIx + 1) : "column " + ((_submissionIx % 6) + 1));
     }
 
     private bool ButtonPress()
@@ -167,13 +173,17 @@ public class AquaButtonScript : MonoBehaviour
         switch (_stage)
         {
             case Stage.Fruits:
-                var submittedFruit = (_fruitInfoDict[_puzzle.Clues[_fruitHighlight]].FruitColor).ToString() + " " + (_fruitInfoDict[_puzzle.Clues[_fruitHighlight]].FruitModel);
-                var correctFruit = (_fruitInfoDict[_puzzle.Clues[0]].FruitColor).ToString() + " " + (_fruitInfoDict[_puzzle.Clues[0]].FruitModel);
-                if (_fruitHighlight != 0)
+                var a = _fruitHighlight < 6 ? (5 - _fruitHighlight) : _fruitHighlight;
+                var b = _submissionIx < 6 ? (5 - _submissionIx) : _submissionIx;
+                var submittedFruit = (_fruitInfoDict[_puzzle.Clues[a]].FruitColor).ToString() + " " + (_fruitInfoDict[_puzzle.Clues[a]].FruitModel);
+                var correctFruit = (_fruitInfoDict[_puzzle.Clues[b]].FruitColor).ToString() + " " + (_fruitInfoDict[_puzzle.Clues[b]].FruitModel);
+                if (_fruitHighlight != _submissionIx)
                 {
-                    Debug.LogFormat("[The Aqua Button #{0}] Stage 1: You submitted the {1} at index {2} instead of the {3} at index 1. Strike.", _moduleId,
-                        submittedFruit, _fruitHighlight + 1,
-                        correctFruit);
+                    Debug.LogFormat("[The Aqua Button #{0}] Stage 1: You submitted the {1} at {2} instead of the {3} at {4}. Strike.", _moduleId,
+                        submittedFruit,
+                        _fruitHighlight < 6 ? "row " + (6 - _fruitHighlight) : "column " + ((_fruitHighlight % 6) + 1),
+                        correctFruit,
+                        _submissionIx < 6 ? "row " + (6 - _submissionIx) : "column " + ((_submissionIx % 6) + 1));
                     Module.HandleStrike();
                 }
                 else
@@ -326,7 +336,7 @@ public class AquaButtonScript : MonoBehaviour
 
         var axesRotators = NewArray(GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator(), GetRandomAxisRotator());
         var shapeObjs = new List<Transform>();
-        
+
         while (width < .6f || numCopies < 2)
         {
             for (int i = 0; i < 12; i++)
@@ -361,6 +371,12 @@ public class AquaButtonScript : MonoBehaviour
 
             FruitsSpotlight.transform.localEulerAngles = new Vector3(40, calcAngle, 0);
             _fruitHighlight = (selected + randomOffset) % 12;
+            if (d != _fruitHighlight)
+            {
+                d = _fruitHighlight;
+                var temp = d < 6 ? (5 - d) : d % 6;
+                Debug.Log((d < 6 ? "r" : "c") + (temp + 1));
+            }
             var axisAngle = (90f * Time.time) % 360;
             var angle = (120f * Time.time) % 360;
 
@@ -371,6 +387,8 @@ public class AquaButtonScript : MonoBehaviour
         }
         Destroy(scroller);
     }
+
+    private int d = -1;
 
     private T[] NewArray<T>(params T[] array) { return array; }
 
@@ -479,7 +497,7 @@ public class AquaButtonScript : MonoBehaviour
         if (_stage == Stage.Fruits && (m = Regex.Match(command, @"^\s*tap((?:[\s,;]+(?:[ryb]|red|yellow|blue)\s*(?:a(?:pple)?|b(?:anana)?|c(?:herry)?|g(?:rape)?|l(?:emon)?|p(?:ineapple)?|s(?:trawberry)?))+)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)).Success)
         {
             var colors = new[] { "r", "y", "b" };
-            var fruits = new[] { "a", "b", "c", "g", "l", "p", "s"};
+            var fruits = new[] { "a", "b", "c", "g", "l", "p", "s" };
             var pieces = m.Groups[1].Value.Split(new[] { ' ', ',', ';', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var ixs = new List<FruitInfo>();
             for (var i = 0; i < pieces.Length; i++)
@@ -539,7 +557,7 @@ public class AquaButtonScript : MonoBehaviour
     {
         if (_stage == Stage.Fruits)
         {
-            while (_fruitHighlight != 0)
+            while (_fruitHighlight != _submissionIx)
                 yield return true;
             ButtonSelectable.OnInteract();
             ButtonSelectable.OnInteractEnded();
