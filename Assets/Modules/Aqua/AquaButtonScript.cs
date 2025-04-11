@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml;
 using BunchOfButtonsLib;
 using KModkit;
 using UnityEngine;
-using UnityEngine.Video;
 using Rnd = UnityEngine.Random;
 
 public class AquaButtonScript : MonoBehaviour
@@ -143,15 +141,11 @@ public class AquaButtonScript : MonoBehaviour
 
         Debug.LogFormat("[The Aqua Button #{0}] The solution word is {1}.", _moduleId, _puzzle.Word);
         Debug.LogFormat("[The Aqua Button #{0}] The given fruits are: {1}.", _moduleId,
-            Enumerable.Range(0, 12)
-            .Select(x => _fruitInfoDict[_puzzle.Clues[x]].FruitColor.ToString() + " " + _fruitInfoDict[_puzzle.Clues[x]].FruitModel.ToString()).Join(", "));
+            Enumerable.Range(0, 12).Select(x => $"{_fruitInfoDict[_puzzle.Clues[x]].FruitColor} {_fruitInfoDict[_puzzle.Clues[x]].FruitModel}").Join(", "));
         Debug.LogFormat("[The Aqua Button #{0}] The nonogram clues represented by these fruits are: {1}.", _moduleId,
-            Enumerable.Range(0, 12).Select(x => _puzzle.Clues[x]).ToArray().Join(", "));
+            Enumerable.Range(0, 12).Select(x => _puzzle.Clues[x]).Join(", "));
         _submissionIx = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(BombInfo.GetSerialNumber()[0]) / 3;
-        int thing = _submissionIx < 6 ? (5 - _submissionIx) : _submissionIx;
-        Debug.LogFormat("[The Aqua Button #{0}] The fruit to submit is the {1} at {2}.", _moduleId,
-            _fruitInfoDict[_puzzle.Clues[thing]].FruitColor.ToString() + " " + _fruitInfoDict[_puzzle.Clues[thing]].FruitModel.ToString(),
-            _submissionIx < 6 ? "row " + (_submissionIx + 1) : "column " + ((_submissionIx % 6) + 1));
+        Debug.Log($"[The Aqua Button #{_moduleId}] The fruit to submit is the {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitColor} {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitModel} at {(_submissionIx < 6 ? "row " + (6 - _submissionIx) : "column " + ((_submissionIx % 6) + 1))}.");
     }
 
     private bool ButtonPress()
@@ -173,17 +167,11 @@ public class AquaButtonScript : MonoBehaviour
         switch (_stage)
         {
             case Stage.Fruits:
-                var a = _fruitHighlight < 6 ? (5 - _fruitHighlight) : _fruitHighlight;
-                var b = _submissionIx < 6 ? (5 - _submissionIx) : _submissionIx;
-                var submittedFruit = (_fruitInfoDict[_puzzle.Clues[a]].FruitColor).ToString() + " " + (_fruitInfoDict[_puzzle.Clues[a]].FruitModel);
-                var correctFruit = (_fruitInfoDict[_puzzle.Clues[b]].FruitColor).ToString() + " " + (_fruitInfoDict[_puzzle.Clues[b]].FruitModel);
+                var submittedFruit = $"{_fruitInfoDict[_puzzle.Clues[_fruitHighlight]].FruitColor} {_fruitInfoDict[_puzzle.Clues[_fruitHighlight]].FruitModel}";
+                var correctFruit = $"{_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitColor} {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitModel}";
                 if (_fruitHighlight != _submissionIx)
                 {
-                    Debug.LogFormat("[The Aqua Button #{0}] Stage 1: You submitted the {1} at {2} instead of the {3} at {4}. Strike.", _moduleId,
-                        submittedFruit,
-                        _fruitHighlight < 6 ? "row " + (6 - _fruitHighlight) : "column " + ((_fruitHighlight % 6) + 1),
-                        correctFruit,
-                        _submissionIx < 6 ? "row " + (6 - _submissionIx) : "column " + ((_submissionIx % 6) + 1));
+                    Debug.Log($"[The Aqua Button #{_moduleId}] Stage 1: You submitted the {submittedFruit} at {(_fruitHighlight < 6 ? "row " + (6 - _fruitHighlight) : "column " + ((_fruitHighlight % 6) + 1))} instead of the {correctFruit} at {(_submissionIx < 6 ? "row " + (6 - _submissionIx) : "column " + ((_submissionIx % 6) + 1))}. Strike.");
                     Module.HandleStrike();
                 }
                 else
@@ -194,7 +182,7 @@ public class AquaButtonScript : MonoBehaviour
                 {
                     if (_wordHighlight != (_puzzle.Word[_wordProgress] - 'A') / 9)
                     {
-                        Debug.LogFormat(@"[The Aqua Button #{0}] Stage 2: You selected section {1} for letter #{2}. Strike!", _moduleId, WordTexts[_wordHighlight].text, _wordProgress + 1);
+                        Debug.Log($"[The Aqua Button #{_moduleId}] Stage 2: You selected section {WordTexts[_wordHighlight].text} for letter #{_wordProgress + 1}. Strike!");
                         Module.HandleStrike();
                     }
                     else
@@ -204,7 +192,7 @@ public class AquaButtonScript : MonoBehaviour
                 {
                     if (_wordHighlight != ((_puzzle.Word[_wordProgress] - 'A') % 9) / 3)
                     {
-                        Debug.LogFormat(@"[The Aqua Button #{0}] Stage 2: You selected section {1} for letter #{2}. Strike!", _moduleId, WordTexts[_wordHighlight].text, _wordProgress + 1);
+                        Debug.Log($"[The Aqua Button #{_moduleId}] Stage 2: You selected section {WordTexts[_wordHighlight].text} for letter #{_wordProgress + 1}. Strike!");
                         Module.HandleStrike();
                         _wordSection = 0;
                     }
@@ -213,16 +201,16 @@ public class AquaButtonScript : MonoBehaviour
                 }
                 else if (_wordSection + _wordHighlight >= 30)
                 {
-                    Debug.LogFormat(@"[The Aqua Button #{0}] Stage 2: You submitted the empty slot after Z. Strike!", _moduleId);
+                    Debug.Log($"[The Aqua Button #{_moduleId}] Stage 2: You submitted the empty slot after Z. Strike!");
                     Module.HandleStrike();
                     _wordSection = 0;
                 }
                 else
                 {
-                    var nextLetter = (char)('A' + ((_wordSection - 4) * 3 + _wordHighlight));
+                    var nextLetter = (char) ('A' + ((_wordSection - 4) * 3 + _wordHighlight));
                     if (nextLetter != _puzzle.Word[_wordProgress])
                     {
-                        Debug.LogFormat(@"[The Aqua Button #{0}] Stage 2: You submitted {1} for letter #{2}. Strike!", _moduleId, nextLetter, _wordProgress + 1);
+                        Debug.Log($"[The Aqua Button #{_moduleId}] Stage 2: You submitted {nextLetter} for letter #{_wordProgress + 1}. Strike!");
                         Module.HandleStrike();
                     }
                     else
@@ -343,10 +331,10 @@ public class AquaButtonScript : MonoBehaviour
             {
                 int ix = (i + randomOffset) % 12;
                 var shapeObj = MakeGameObject(string.Format("Shape {0}", ix + 1), scroller.transform, position: new Vector3(width, .01625f, 0), scale: new Vector3(.04f, .04f, .04f));
-                shapeObj.AddComponent<MeshFilter>().sharedMesh = FruitMeshes[(int)_fruitInfoDict[_puzzle.Clues[ix]].FruitModel];
+                shapeObj.AddComponent<MeshFilter>().sharedMesh = FruitMeshes[(int) _fruitInfoDict[_puzzle.Clues[ix]].FruitModel];
                 var mr = shapeObj.AddComponent<MeshRenderer>();
                 mr.material = _maskMaterials.DiffuseTint;
-                mr.material.color = FruitColors[(int)_fruitInfoDict[_puzzle.Clues[ix]].FruitColor];
+                mr.material.color = FruitColors[(int) _fruitInfoDict[_puzzle.Clues[ix]].FruitColor];
 
                 width += separation;
                 shapeObjs.Add(shapeObj.transform);
@@ -371,12 +359,6 @@ public class AquaButtonScript : MonoBehaviour
 
             FruitsSpotlight.transform.localEulerAngles = new Vector3(40, calcAngle, 0);
             _fruitHighlight = (selected + randomOffset) % 12;
-            if (d != _fruitHighlight)
-            {
-                d = _fruitHighlight;
-                var temp = d < 6 ? (5 - d) : d % 6;
-                Debug.Log((d < 6 ? "r" : "c") + (temp + 1));
-            }
             var axisAngle = (90f * Time.time) % 360;
             var angle = (120f * Time.time) % 360;
 
@@ -387,8 +369,6 @@ public class AquaButtonScript : MonoBehaviour
         }
         Destroy(scroller);
     }
-
-    private int d = -1;
 
     private T[] NewArray<T>(params T[] array) { return array; }
 
@@ -426,11 +406,11 @@ public class AquaButtonScript : MonoBehaviour
             }
             else
             {
-                _wordHighlight = (int)((Time.time % 1.8f) / 1.8f * 3);
+                _wordHighlight = (int) ((Time.time % 1.8f) / 1.8f * 3);
                 for (var i = 0; i < 3; i++)
                 {
                     WordTexts[i].gameObject.SetActive(true);
-                    WordTexts[i].color = i == _wordHighlight ? Color.white : (Color)new Color32(0x1B, 0x37, 0x73, 0xFF);
+                    WordTexts[i].color = i == _wordHighlight ? Color.white : (Color) new Color32(0x1B, 0x37, 0x73, 0xFF);
                 }
                 WordResultText.text = _puzzle.Word.Substring(0, _wordProgress) + "_";
 
@@ -443,12 +423,12 @@ public class AquaButtonScript : MonoBehaviour
                 else if (_wordSection <= 3)
                 {
                     for (var triplet = 0; triplet < 3; triplet++)
-                        WordTexts[triplet].text = _wordSection == 3 && triplet == 2 ? "YZ" : Enumerable.Range(0, 3).Select(ltr => (char)('A' + (_wordSection - 1) * 9 + 3 * triplet + ltr)).Join("");
+                        WordTexts[triplet].text = _wordSection == 3 && triplet == 2 ? "YZ" : Enumerable.Range(0, 3).Select(ltr => (char) ('A' + (_wordSection - 1) * 9 + 3 * triplet + ltr)).Join("");
                 }
                 else
                 {
                     for (var ltr = 0; ltr < 3; ltr++)
-                        WordTexts[ltr].text = _wordSection == 12 && ltr == 2 ? "" : ((char)('A' + ((_wordSection - 4) * 3 + ltr))).ToString();
+                        WordTexts[ltr].text = _wordSection == 12 && ltr == 2 ? "" : ((char) ('A' + ((_wordSection - 4) * 3 + ltr))).ToString();
                 }
                 yield return null;
             }
@@ -506,11 +486,11 @@ public class AquaButtonScript : MonoBehaviour
                 int cIx, frIx;
                 if (pieces[i].Length == 2 && (cIx = Array.IndexOf(colors, pieces[i].Substring(0, 1))) != -1 && (frIx = Array.IndexOf(fruits, pieces[i].Substring(1))) != -1)
                 {
-                    ixs.Add(new FruitInfo((FruitModel)frIx, (FruitColor)cIx));
+                    ixs.Add(new FruitInfo((FruitModel) frIx, (FruitColor) cIx));
                 }
                 else if ((cIx = Array.IndexOf(colors, pieces[i].Substring(0, 1))) != -1 && i < pieces.Length - 1 && (frIx = Array.IndexOf(fruits, pieces[i + 1].Substring(0, 2))) != -1)
                 {
-                    ixs.Add(new FruitInfo((FruitModel)frIx, (FruitColor)cIx));
+                    ixs.Add(new FruitInfo((FruitModel) frIx, (FruitColor) cIx));
                     i++;
                 }
                 else
