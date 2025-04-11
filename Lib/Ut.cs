@@ -678,5 +678,27 @@ namespace BunchOfButtonsLib
                             yield return source.Skip(i).Take(1).Concat(p);
             }
         }
+
+        public static IEnumerable<int> CreateNonogramClue(this IEnumerable<bool> source)
+        {
+            var any = false;
+            var prevElem = false;
+            var curCount = 0;
+            foreach (var elem in source)
+            {
+                if (!any)
+                    any = true;
+                else if (prevElem != elem)
+                {
+                    if (prevElem)
+                        yield return curCount;
+                    curCount = 0;
+                }
+                curCount++;
+                prevElem = elem;
+            }
+            if (any && prevElem)
+                yield return curCount;
+        }
     }
 }
