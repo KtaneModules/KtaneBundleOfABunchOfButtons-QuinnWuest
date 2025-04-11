@@ -139,13 +139,12 @@ public class AquaButtonScript : MonoBehaviour
 
         _puzzle = AquaButtonPuzzle.GeneratePuzzle(seed);
 
-        Debug.LogFormat("[The Aqua Button #{0}] The given fruits are: {1}.", _moduleId,
-            Enumerable.Range(0, 12).Select(x => $"{_fruitInfoDict[_puzzle.Clues[x]].FruitColor} {_fruitInfoDict[_puzzle.Clues[x]].FruitModel}").Join(", "));
-        Debug.LogFormat("[The Aqua Button #{0}] The nonogram clues represented by these fruits are: {1}.", _moduleId,
-            Enumerable.Range(0, 12).Select(x => _puzzle.Clues[x]).Join(", "));
+        Debug.Log($"[The Aqua Button #{_moduleId}] Clues are ordered from the bottom row going up to the left column going right.");
+        Debug.Log($"[The Aqua Button #{_moduleId}] The given fruits are: {Enumerable.Range(0, 12).Select(x => $"{_fruitInfoDict[_puzzle.Clues[x]].FruitColor} {_fruitInfoDict[_puzzle.Clues[x]].FruitModel}").Join(", ")}.");
+        Debug.Log($"[The Aqua Button #{_moduleId}] The nonogram clues represented by these fruits are: {Enumerable.Range(0, 12).Select(x => _puzzle.Clues[x]).Join(", ")}.");
         _submissionIx = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".IndexOf(BombInfo.GetSerialNumber()[0]) / 3;
         Debug.Log($"[The Aqua Button #{_moduleId}] The fruit to submit is the {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitColor} {_fruitInfoDict[_puzzle.Clues[_submissionIx]].FruitModel} at {(_submissionIx < 6 ? "row " + (6 - _submissionIx) : "column " + ((_submissionIx % 6) + 1))}.");
-        Debug.Log($"[The Aqua Button #{_moduleId}] The solution to the bitmap is:");
+        Debug.Log($"[The Aqua Button #{_moduleId}] The solution to the nonogram puzzle is:");
         for (int row = 0; row < 6; row++)
         {
             var bitmapRow = Enumerable.Range(row * 6, 6).Select(i => _puzzle.Bitmap[i] ? "█" : "░").Join("");
