@@ -30,6 +30,7 @@ public class CyanButtonScript : MonoBehaviour
     private bool _autoSolving;
     private bool _isAnimating;
 
+    private static readonly string[] _positionNames = new string[] { "top-left", "top-middle", "top-right", "bottom-left", "bottom-middle", "bottom-right" };
     private static readonly float[] xPos = { -0.05f, 0f, 0.05f, -0.05f, 0f, 0.05f };
     private static readonly float[] zPos = { 0f, 0f, 0f, -0.05f, -0.05f, -0.05f };
 
@@ -84,9 +85,9 @@ public class CyanButtonScript : MonoBehaviour
             _buttonPositions[2] != 2 &&
             _buttonPositions[3] != 3 &&
             _buttonPositions[4] != 4 &&
-            _buttonPositions[5] != 5
-            );
+            _buttonPositions[5] != 5);
 
+        Debug.LogFormat("[The Cyan Button #{0}] The positions of the buttons at each stage are: {1}.", _moduleId, Enumerable.Range(0, 6).Select(i => _positionNames[i]).Join(", "));
         Debug.LogFormat("[The Cyan Button #{0}] The stages in which the button must be pressed are: {1}.",
             _moduleId, Enumerable.Range(0, 6).Where(st => _correctPresses[st]).Select(i => i + 1).Join(", "));
     }

@@ -25,6 +25,7 @@ public class CornflowerButtonScript : MonoBehaviour
     private static int _moduleIdCounter = 1;
     private int _moduleId;
     private bool _moduleSolved;
+    private bool _inUnity;
     private Type _selectableType;
     private Type _alarmClockType;
     private FieldInfo _childrenField;
@@ -53,6 +54,7 @@ public class CornflowerButtonScript : MonoBehaviour
         ButtonSelectable.OnInteract += ButtonPress;
         ButtonSelectable.OnInteractEnded += ButtonRelease;
 
+
         do
         {
             _arrowPositions[0] = Rnd.Range(0, 5);
@@ -63,6 +65,12 @@ public class CornflowerButtonScript : MonoBehaviour
 
         _ignoreList = BossModule.GetIgnoredModules(Module, _defaultIgnoreList);
 
+        if (Application.isEditor)
+        {
+            Debug.LogFormat("[The Cornflower Button #{0}] In Unity scene. Press the module to solve.", _moduleId);
+            _inUnity = true;
+            return;
+        }
         StartCoroutine(Init());
     }
 
@@ -296,6 +304,13 @@ public class CornflowerButtonScript : MonoBehaviour
         if (_moduleSolved)
             return false;
 
+        if (_inUnity)
+        {
+            _moduleSolved = true;
+            Module.HandlePass();
+            return false;
+        }
+
         for (var i = 0; i < 2; i++)
         {
             var pos = (_selectedArrows + i) % 3;
@@ -305,8 +320,8 @@ public class CornflowerButtonScript : MonoBehaviour
         if (_arrowPositions.All(p => p == 0))
         {
             Debug.LogFormat("[The Cornflower Button #{0}] Module solved.", _moduleId);
-            Module.HandlePass();
             _moduleSolved = true;
+            Module.HandlePass();
         }
         return false;
     }
