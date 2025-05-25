@@ -208,8 +208,6 @@ public class CyanButtonScript : MonoBehaviour
             ButtonObj.SetActive(true);
             yield return new WaitForSeconds(0.2f);
         }
-        else
-            ButtonSelObj.SetActive(false);
         var duration = 0.3f;
         var elapsed = 0f;
         while (elapsed < duration)
